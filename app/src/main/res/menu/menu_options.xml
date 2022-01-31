@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_nuevoejercicio"
+            android:icon="?android:attr/textSelectHandleRight"
+            android:title="@string/menu_nuevoejercicio" />
+        <item
+            android:id="@+id/nav_nuevoentrenamiento"
+            android:icon="@drawable/ic_stat_name"
+            android:title="@string/menu_nuevoentrenamiento" />
+        <item
+            android:id="@+id/nav_ultimoentrenamiento"
+            android:icon="@drawable/ic_stat_name"
+            android:title="@string/menu_ultimoentrenamiento" />
+    </group>
+</menu>
