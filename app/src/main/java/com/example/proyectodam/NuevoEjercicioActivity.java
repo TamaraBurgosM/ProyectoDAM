@@ -1,7 +1,13 @@
 package com.example.proyectodam;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +16,12 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.proyectodam.Model.Ejercicio;
+
 
 public class NuevoEjercicioActivity extends AppCompatActivity {
 
+    Context c = this;
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -20,50 +29,99 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }*/
-    //private Ejercicio ejercicio;
-    //private GestionFicheros gf;
+    private Ejercicio ejercicio = new Ejercicio();
+    private GestionFicheros gf = new GestionFicheros();
+    private RadioButton rbCuantaAtras;
+    private RadioButton rbCronometro;
+    private RadioButton rbRepeticiones;
+    private EditText tValor;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        RadioGroup rgTipo = findViewById(R.id.rgTipo);
-        RadioButton rbRepeticiones = findViewById(R.id.rbRepeticiones);
-        RadioButton rbCuantaAtras = findViewById(R.id.rbCuantaAtras);
-        RadioButton rbCronometro = findViewById(R.id.rbCronometro);
-
         setContentView(R.layout.activity_nuevo_ejercicio);
-       String nombreEjercicio="";
-        String datos="";
+        setRadioButton();
 
-        //Radio Group
-        /*rgTipo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int idDeRadioButtonSeleccionado = rgTipo.getCheckedRadioButtonId();
-                if (idDeRadioButtonSeleccionado == rbCronometro.getId()) {
-                    ejercicio.setcTipo('C');
-                } else if (idDeRadioButtonSeleccionado == rbCuantaAtras.getId()) {
-                    ejercicio.setcTipo('A');
-                } else if(idDeRadioButtonSeleccionado == rbRepeticiones.getId()){
-                    ejercicio.setcTipo('R');
-                }
-            }
-        });*/
 
-        //Boton guardado
+        setUpView();
+    }
+    private void setUpView(){
+
+
         final Button button = findViewById(R.id.bGuardar);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final EditText et1 = (EditText) v.findViewById(R.id.tNombreEjercicio);
-               // ejercicio.setsNombre(et1.toString());
-               // gf.guardarFichero("Ejercicios",ejercicio.getsNombre());
-                startActivity(new Intent(NuevoEjercicioActivity.this, MainActivity.class));
+                /*TODO:
+                    -Validacion de valores
+                    -Validación de campos rellenos
+                * */
+
+            final EditText tNombreEjercicio = (EditText) findViewById(R.id.tNombreEjercicio);
+           // String valor = tNombreEjercicio.getText().toString();
+            ejercicio.setsNombre(tNombreEjercicio.getText().toString());
+            ejercicio.setsValor(tValor.getText().toString());
+            guardar();
+            startActivity(new Intent(NuevoEjercicioActivity.this, MainActivity.class));
             }
 
         });
     }
+
+    private void guardar (){
+
+        String sDatos = ejercicio.getiId() +";"+
+                ejercicio.getcTipo() +";"+
+                ejercicio.getsNombre() +";"+
+                ejercicio.getsValor();
+
+        gf.guardarFichero("Ejercicios", sDatos, this,c);
+    }
+
+
+
+    private void setRadioButton(){
+        rbCuantaAtras = (RadioButton) findViewById(R.id.rbCuantaAtras);
+        rbCronometro = (RadioButton) findViewById(R.id.rbCronometro);
+        rbRepeticiones = (RadioButton) findViewById(R.id.rbRepeticiones);
+
+
+        rbCuantaAtras.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                rbCuantaAtras.setChecked(true);
+                rbCronometro.setChecked(false);
+                rbRepeticiones.setChecked(false);
+                ejercicio.setcTipo('A');
+                tValor = (EditText) findViewById(R.id.etCuentaAtras);
+
+            }
+        });
+
+        rbCronometro.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                rbCuantaAtras.setChecked(false);
+                rbCronometro.setChecked(true);
+                rbRepeticiones.setChecked(false);
+                ejercicio.setcTipo('C');
+                tValor = (EditText) findViewById(R.id.etCronometro);
+            }
+        });
+
+        rbRepeticiones.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                rbCuantaAtras.setChecked(false);
+                rbCronometro.setChecked(false);
+                rbRepeticiones.setChecked(true);
+                ejercicio.setcTipo('R');
+                tValor = (EditText) findViewById(R.id.etRepeticiones);
+            }
+        });
+
+    }
+
+
+
 
    // private void setSupportActionBar(RelativeLayout toolbar) {
    // }
@@ -101,5 +159,21 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
 
         return linea;
     }*/
+
+
+    //Radio Group
+        /*rgTipo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int idDeRadioButtonSeleccionado = rgTipo.getCheckedRadioButtonId();
+                if (idDeRadioButtonSeleccionado == rbCronometro.getId()) {
+                    ejercicio.setcTipo('C');
+                } else if (idDeRadioButtonSeleccionado == rbCuantaAtras.getId()) {
+                    ejercicio.setcTipo('A');
+                } else if(idDeRadioButtonSeleccionado == rbRepeticiones.getId()){
+                    ejercicio.setcTipo('R');
+                }
+            }
+        });*/
 
 }

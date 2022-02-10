@@ -42,6 +42,13 @@
         android:paddingRight="50dp"
         android:layout_gravity="center">
 
+        <TextView
+            android:id="@+id/tvTextoPrevio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Aun no hay datos" />
+
         <Button
             android:id="@+id/bEntrar"
             android:layout_width="wrap_content"

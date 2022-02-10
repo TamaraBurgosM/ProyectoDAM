@@ -49,10 +49,11 @@
                     android:text="@string/cronometro" />
 
             <EditText
-                android:id="@+id/editTextTime"
+                android:id="@+id/etCronometro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
+                android:hint="00:00ms"
                 android:ems="10"
                 android:inputType="time" />
 
@@ -70,10 +71,11 @@
                 android:text="@string/cuantaAtras" />
 
             <EditText
-                android:id="@+id/editTextTime2"
+                android:id="@+id/etCuentaAtras"
                 android:layout_width="139dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
+                android:hint="00:00ms"
                 android:ems="10"
                 android:inputType="time" />
         </LinearLayout>
@@ -91,7 +93,7 @@
                 android:text="@string/repeticiones" />
 
             <EditText
-                android:id="@+id/tRepeticionesValor"
+                android:id="@+id/etRepeticiones"
                 android:layout_width="139dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"

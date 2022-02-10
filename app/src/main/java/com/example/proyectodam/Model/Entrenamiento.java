@@ -8,6 +8,12 @@ public class Entrenamiento {
     public String sNombre;
     public ArrayList <Ejercicio> aEjercicio;
 
+    public Entrenamiento() {
+        this.iId = iId;
+        this.sNombre = sNombre;
+        this.aEjercicio = aEjercicio;
+    }
+
     public Entrenamiento(int iId, String sNombre, ArrayList<Ejercicio> aEjercicio) {
         this.iId = iId;
         this.sNombre = sNombre;

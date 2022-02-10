@@ -33,7 +33,7 @@
     <string name="ficheroEntrenamiento">Entrenamientos.txt</string>
     <string name="ficheroEjercicios">Ejercicios.txt</string>
     <string name="ficheroRegistro">Registro.txt</string>
-    <string name="ruta">asd</string>
+    <string name="ruta">""</string>
 
 
 </resources>
