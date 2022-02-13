@@ -1,4 +1,4 @@
-package Model;
+package com.example.proyectodam.Model;
 
 public class Ejercicio {
 
@@ -7,6 +7,12 @@ public class Ejercicio {
     public char cTipo;
     public String sValor;
 
+    public Ejercicio() {
+        this.iId = iId;
+        this.sNombre = sNombre;
+        this.cTipo = cTipo;
+        this.sValor = sValor;
+    }
     public Ejercicio(int iId, String sNombre, char cTipo, String sValor) {
         this.iId = iId;
         this.sNombre = sNombre;

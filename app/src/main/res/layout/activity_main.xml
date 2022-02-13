@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <!--<android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,25 +20,46 @@ tools:context=".MainActivity">
 
     </android.support.design.widget.AppBarLayout>-->
 
-<!--<include layout="@layout/main_content" /> -->
+    <include
+        android:id="@+id/include"
+        layout="@layout/main_content" />
 
-<!--Boton correo <android.support.design.widget.FloatingActionButton
+    <!--Boton correo <android.support.design.widget.FloatingActionButton
 
-    android:id="@+id/fab"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_marginEnd="@dimen/fab_margin"
-    android:layout_marginBottom="16dp"
-    app:srcCompat="@android:drawable/ic_dialog_email" />-->
-
-    <Button
-        android:id="@+id/bEntrar"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Entrar"
-        android:layout_weight="1"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical|center_horizontal|center"  />
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@android:drawable/ic_dialog_email" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/tvTextoPrevio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Aun no hay datos" />
+
+        <Button
+            android:id="@+id/bEntrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal|center"
+            android:text="Entrar"
+            app:layout_anchor="@+id/include"
+            app:layout_anchorGravity="center" />
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
