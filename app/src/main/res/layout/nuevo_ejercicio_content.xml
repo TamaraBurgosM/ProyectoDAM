@@ -18,10 +18,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:text="Nombre del ejercicio: " />
+            android:text="@string/nombre_del_ejercicio" />
 
         <EditText
             android:id="@+id/tNombreEjercicio"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
@@ -33,7 +35,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/rgTipo"
-        android:text="Tipo de ejercicio">
+        android:text="@string/tipo_de_ejercicio">
 
 
         <LinearLayout
@@ -42,20 +44,21 @@
             android:orientation="horizontal">
 
             <RadioButton
-                    android:id="@+id/rbCronometro"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onRadioButtonClicked"
-                    android:text="@string/cronometro" />
+                android:id="@+id/rbCronometro"
+                android:layout_width="139dp"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/cronometro" />
 
             <EditText
                 android:id="@+id/etCronometro"
-                android:layout_width="match_parent"
+                android:layout_width="139dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:hint="00:00ms"
+                android:layout_marginStart="50dp"
                 android:ems="10"
-                android:inputType="time" />
+                android:hint="@string/_00_00ms"
+                android:inputType="time"
+                android:visibility="invisible"/>
 
         </LinearLayout>
         <LinearLayout
@@ -65,7 +68,7 @@
 
             <RadioButton
                 android:id="@+id/rbCuantaAtras"
-                android:layout_width="wrap_content"
+                android:layout_width="139dp"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
                 android:text="@string/cuantaAtras" />
@@ -74,10 +77,11 @@
                 android:id="@+id/etCuentaAtras"
                 android:layout_width="139dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:hint="00:00ms"
+                android:layout_marginStart="50dp"
+                android:hint="@string/_00_00ms"
                 android:ems="10"
-                android:inputType="time" />
+                android:inputType="time"
+                android:visibility="invisible"/>
         </LinearLayout>
 
         <LinearLayout
@@ -87,7 +91,7 @@
 
             <RadioButton
                 android:id="@+id/rbRepeticiones"
-                android:layout_width="wrap_content"
+                android:layout_width="139dp"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
                 android:text="@string/repeticiones" />
@@ -96,9 +100,10 @@
                 android:id="@+id/etRepeticiones"
                 android:layout_width="139dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:ems="10"
-                android:inputType="number" />
+                android:inputType="number"
+                android:visibility="invisible"/>
         </LinearLayout>
 
     </RadioGroup>
@@ -109,7 +114,7 @@
         android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="showTimePickerDialog"
+        android:onClick="onClickGuardar"
         android:text="@string/bGuardar" />
 
 

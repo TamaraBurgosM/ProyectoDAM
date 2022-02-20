@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.proyectodam.Model.Ejercicio;
 
@@ -34,7 +35,11 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
     private RadioButton rbCuantaAtras;
     private RadioButton rbCronometro;
     private RadioButton rbRepeticiones;
-    private EditText tValor;
+    private String sValor;
+    private EditText etCronometro;
+    private EditText etCuentaAtras;
+    private EditText etRepeticiones;
+    private EditText tNombreEjercicio;
 
 
     @Override
@@ -49,34 +54,57 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
     }
     private void setUpView(){
 
+        etCronometro = (EditText) findViewById(R.id.etCronometro);
+        etRepeticiones = (EditText) findViewById(R.id.etRepeticiones);
+        etCuentaAtras = (EditText) findViewById(R.id.etCuentaAtras);
+        tNombreEjercicio= (EditText) findViewById(R.id.tNombreEjercicio);
 
-        final Button button = findViewById(R.id.bGuardar);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                /*TODO:
-                    -Validacion de valores
-                    -Validación de campos rellenos
-                * */
-
-            final EditText tNombreEjercicio = (EditText) findViewById(R.id.tNombreEjercicio);
-           // String valor = tNombreEjercicio.getText().toString();
-            ejercicio.setsNombre(tNombreEjercicio.getText().toString());
-            ejercicio.setsValor(tValor.getText().toString());
-            guardar();
-            startActivity(new Intent(NuevoEjercicioActivity.this, MainActivity.class));
-            }
-
-        });
     }
 
-    private void guardar (){
+    public void onClickGuardar(View view){
+        // String valor = tNombreEjercicio.getText().toString();
+
+
+
+        if(guardar()) {
+            startActivity(new Intent(NuevoEjercicioActivity.this, MainActivity.class));
+        }
+    }
+
+    private boolean guardar (){
+        ejercicio.setsNombre(tNombreEjercicio.getText().toString());
+        if(etCronometro.getVisibility() == View.VISIBLE){
+            sValor = etCronometro.getText().toString();
+        }
+        else if(etCuentaAtras.getVisibility() == View.VISIBLE){
+            sValor = etCuentaAtras.getText().toString();
+        }
+        else if(etRepeticiones.getVisibility() == View.VISIBLE){
+            sValor = etRepeticiones.getText().toString();
+        }
+        else{
+            sValor="";
+        }
+        ejercicio.setsValor(sValor);
+
 
         String sDatos = ejercicio.getiId() +";"+
                 ejercicio.getcTipo() +";"+
                 ejercicio.getsNombre() +";"+
                 ejercicio.getsValor();
 
-        gf.guardarFichero("Ejercicios", sDatos, this,c);
+        if (ejercicio.getsValor().isEmpty() || ejercicio.getsValor()=="00:00ms") {
+            Toast.makeText(c, "Debe introducir un valor", Toast.LENGTH_SHORT).show();
+        } else if (ejercicio.getcTipo() == 0) {
+            Toast.makeText(c, "Debe introducir un tipo", Toast.LENGTH_SHORT).show();
+        } else if (ejercicio.getsNombre().isEmpty()) {
+            Toast.makeText(c, "Debe introducir un nombre", Toast.LENGTH_SHORT).show();
+        } else {
+            gf.guardarFichero("Ejercicios", sDatos, this, c);
+            return true;
+        }
+        return false;
+
     }
 
 
@@ -92,8 +120,12 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
                 rbCuantaAtras.setChecked(true);
                 rbCronometro.setChecked(false);
                 rbRepeticiones.setChecked(false);
+
                 ejercicio.setcTipo('A');
-                tValor = (EditText) findViewById(R.id.etCuentaAtras);
+
+                etRepeticiones.setVisibility(View.INVISIBLE);
+                etCronometro.setVisibility(View.INVISIBLE);
+                etCuentaAtras.setVisibility(View.VISIBLE);
 
             }
         });
@@ -103,8 +135,12 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
                 rbCuantaAtras.setChecked(false);
                 rbCronometro.setChecked(true);
                 rbRepeticiones.setChecked(false);
+
                 ejercicio.setcTipo('C');
-                tValor = (EditText) findViewById(R.id.etCronometro);
+
+                etRepeticiones.setVisibility(View.INVISIBLE);
+                etCronometro.setVisibility(View.VISIBLE);
+                etCuentaAtras.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -113,8 +149,13 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
                 rbCuantaAtras.setChecked(false);
                 rbCronometro.setChecked(false);
                 rbRepeticiones.setChecked(true);
+
                 ejercicio.setcTipo('R');
-                tValor = (EditText) findViewById(R.id.etRepeticiones);
+
+                etRepeticiones.setVisibility(View.VISIBLE);
+                etCronometro.setVisibility(View.INVISIBLE);
+                etCuentaAtras.setVisibility(View.INVISIBLE);
+
             }
         });
 
@@ -122,9 +163,8 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
 
 
 
-
-   // private void setSupportActionBar(RelativeLayout toolbar) {
-   // }
+    // private void setSupportActionBar(RelativeLayout toolbar) {
+    // }
 
    /* public void onRadioButtonClicked(View view) {
         // Is the button now checked?

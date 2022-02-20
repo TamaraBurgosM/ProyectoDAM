@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.proyectodam">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_foreground"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.ProyectoDAM">
-
+        <activity
+            android:name=".CuentaAtras"
+            android:exported="false" />
+        <!-- SplashScreen -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -21,7 +26,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -30,12 +35,15 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity> <!-- NuevoEjercicioActivity -->
         <activity
             android:name=".NuevoEjercicioActivity"
             android:exported="false"
-            android:label="@string/title_activity_nuevo_ejercicio"
-            android:theme="@style/Theme.ProyectoDAM.NoActionBar" />
+            android:label="@string/title_activity_nuevo_ejercicio" /> <!-- CronometroActivity -->
+        <activity
+            android:name=".CronometroActivity"
+            android:exported="false"
+            android:label="@string/title_activity_cronometro" />
     </application>
 
 </manifest>

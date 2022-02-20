@@ -2,10 +2,10 @@ package com.example.proyectodam.Model;
 
 public class Ejercicio {
 
-    public int iId;
-    public String sNombre;
-    public char cTipo;
-    public String sValor;
+    public int iId=0;
+    public String sNombre="";
+    public char cTipo= (char) 0;
+    public String sValor="";
 
     public Ejercicio() {
         this.iId = iId;
