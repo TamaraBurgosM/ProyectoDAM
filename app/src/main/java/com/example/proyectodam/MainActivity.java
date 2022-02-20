@@ -27,14 +27,23 @@ public class MainActivity extends AppCompatActivity {
 
         setUpView();
 
-            final Button button = findViewById(R.id.bEntrar);
-            button.setOnClickListener(new View.OnClickListener() {
+            final Button bEntrar = findViewById(R.id.bEntrar);
+        bEntrar.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     startActivity(new Intent(MainActivity.this, NuevoEjercicioActivity.class));
                 }
 
             });
+
+        final Button bCrono = findViewById(R.id.bCrono);
+        bCrono.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                startActivity(new Intent(MainActivity.this, CuentaAtras.class));
+            }
+
+        });
         }
 
     private void setUpView(){
