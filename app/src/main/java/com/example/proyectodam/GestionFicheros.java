@@ -5,22 +5,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 public class GestionFicheros {
@@ -55,7 +50,7 @@ public class GestionFicheros {
 
     public String leerFichero(String nombreFichero, Activity activity, Context c) {
 
-        String datos="No hay datos";
+        StringBuilder datos= new StringBuilder("No hay datos");
 
         if (validarPermisoLectura(activity)) {
 
@@ -68,21 +63,19 @@ public class GestionFicheros {
                 String line = reader.readLine();
                 while (line != null) {
                     stringBuilder.append(line).append('\n');
-                    datos =datos+ line;
+                    datos.append(line);
                     line = reader.readLine();
                 }
 
                  //   datos= stringBuilder.toString();
                 System.out.println("RUTA: "+ c.getPackageResourcePath());
 
-            }catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
-        return datos;
+        return datos.toString();
     }
 
 
@@ -93,8 +86,6 @@ public class GestionFicheros {
              try (FileOutputStream fos = c.openFileOutput(nombreFichero, Context.MODE_PRIVATE)) {
                     fos.write(datos.getBytes(StandardCharsets.UTF_8));
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.proyectodam.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_nuevoejercicio"
+        android:name="com.example.proyectodam.ui.nuevoEjercicio.NuevoEjercicioFragment"
+        android:label="@string/menu_nuevoEjercicio"
+        tools:layout="@layout/fragment_nuevoejercicio" />
+
+    <fragment
+        android:id="@+id/nav_nuevoentrenamiento"
+        android:name="com.example.proyectodam.ui.nuevoEntrenamiento.NuevoEntrenamientoFragment"
+        android:label="@string/menu_nuevoEntrenamiento"
+        tools:layout="@layout/fragment_nuevoentrenamiento" />
+
+    <fragment
+        android:id="@+id/nav_verEntrenamiento"
+        android:name="com.example.proyectodam.ui.nuevoEntrenamiento.NuevoEntrenamientoFragment"
+        android:label="@string/menu_verEntrenamientos"
+        tools:layout="@layout/fragment_verentrenamiento" />
+</navigation>

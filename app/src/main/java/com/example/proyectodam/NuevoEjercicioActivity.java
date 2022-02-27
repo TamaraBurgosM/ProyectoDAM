@@ -1,28 +1,21 @@
 package com.example.proyectodam;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
-
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectodam.Model.Ejercicio;
 
 
 public class NuevoEjercicioActivity extends AppCompatActivity {
 
-    Context c = this;
+
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -40,15 +33,14 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
     private EditText etCuentaAtras;
     private EditText etRepeticiones;
     private EditText tNombreEjercicio;
-
+    Context c = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_nuevo_ejercicio);
+        setContentView(R.layout.fragment_nuevoejercicio);
         setRadioButton();
-
 
         setUpView();
     }
@@ -62,9 +54,6 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
     }
 
     public void onClickGuardar(View view){
-        // String valor = tNombreEjercicio.getText().toString();
-
-
 
         if(guardar()) {
             startActivity(new Intent(NuevoEjercicioActivity.this, MainActivity.class));
