@@ -6,23 +6,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectodam.Model.Ejercicio;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class NuevoEjercicioActivity extends AppCompatActivity {
 
 
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }*/
     private Ejercicio ejercicio = new Ejercicio();
     private GestionFicheros gf = new GestionFicheros();
     private RadioButton rbCuantaAtras;
@@ -61,6 +59,7 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
     }
 
     private boolean guardar (){
+        ejercicio.setiId(idGenerator());
         ejercicio.setsNombre(tNombreEjercicio.getText().toString());
         if(etCronometro.getVisibility() == View.VISIBLE){
             sValor = etCronometro.getText().toString();
@@ -76,27 +75,34 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
         }
         ejercicio.setsValor(sValor);
 
-
         String sDatos = ejercicio.getiId() +";"+
                 ejercicio.getcTipo() +";"+
                 ejercicio.getsNombre() +";"+
-                ejercicio.getsValor();
+                ejercicio.getsValor()+";";
 
-        if (ejercicio.getsValor().isEmpty() || ejercicio.getsValor()=="00:00ms") {
+        if (ejercicio.getsValor().isEmpty() || ejercicio.getsValor().equals("00:00ms")) {
             Toast.makeText(c, "Debe introducir un valor", Toast.LENGTH_SHORT).show();
         } else if (ejercicio.getcTipo() == 0) {
             Toast.makeText(c, "Debe introducir un tipo", Toast.LENGTH_SHORT).show();
         } else if (ejercicio.getsNombre().isEmpty()) {
             Toast.makeText(c, "Debe introducir un nombre", Toast.LENGTH_SHORT).show();
         } else {
+
+            if(ejercicio.getcTipo() == 'C' || ejercicio.getcTipo() == 'A'){
+                Pattern patron = Pattern.compile("[0-9]{1,2}:[0-9]{1,2}");
+                Matcher mat = patron.matcher(ejercicio.getsValor());
+                if(!mat.matches()){
+                    Toast.makeText(c, "Formato incorrecto 00:00", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+
             gf.guardarFichero("Ejercicios", sDatos, this, c);
             return true;
         }
         return false;
 
     }
-
-
 
     private void setRadioButton(){
         rbCuantaAtras = (RadioButton) findViewById(R.id.rbCuantaAtras);
@@ -150,6 +156,22 @@ public class NuevoEjercicioActivity extends AppCompatActivity {
 
     }
 
+    public int idGenerator(){
+        int id=0;
+
+        String texto = gf.leerFichero("Ejercicios",this, c);
+        if(!texto.equals("")) {
+
+            String[] split = texto.split(";");
+
+            id = Integer.parseInt(split[split.length - 4]);
+
+
+
+        return id +1;
+        }
+        return 0;
+    }
 
 
     // private void setSupportActionBar(RelativeLayout toolbar) {

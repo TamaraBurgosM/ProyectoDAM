@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
@@ -32,9 +33,10 @@ public class CuentaAtrasFragment extends Fragment {
     private FloatingActionButton fbBotonCronometroInicia;
     private FloatingActionButton fbBotonCronometroPausa;
     private FloatingActionButton fbBotonCronometroStop;
+    private FloatingActionButton fbNext;
     private TextView etTiempoPrevio;
     private ProgressBar pbProgress;
-    private View v;
+    private View view;
     private String sTiempo = "01:00";
     private long tiempoRestante =60000;
     private TextView tvCuentaAtras;
@@ -50,6 +52,7 @@ public class CuentaAtrasFragment extends Fragment {
     public static CuentaAtrasFragment newInstance(String param1, String param2) {
         CuentaAtrasFragment fragment = new CuentaAtrasFragment();
         Bundle args = new Bundle();
+        args.putString("bundleKey", "result");
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,6 +60,7 @@ public class CuentaAtrasFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
         }
     }
@@ -64,7 +68,8 @@ public class CuentaAtrasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_cuenta_atras, container, false);
+        View v = inflater.inflate(R.layout.fragment_cuenta_atras, container, false);
+        view = inflater.inflate(R.layout.activity_entrenamiento, container, false);
 
       /*  Intent intent = new Intent(getActivity(), EntrenamientoActivity.class);
         startActivity(intent);
@@ -81,6 +86,7 @@ public class CuentaAtrasFragment extends Fragment {
         fbBotonCronometroInicia = (FloatingActionButton) v.findViewById(R.id.fbBotonCronometroInicia);
         fbBotonCronometroPausa = (FloatingActionButton) v.findViewById(R.id.fbBotonCronometroPausa);
         fbBotonCronometroStop = (FloatingActionButton) v.findViewById(R.id.fbBotonCronometroStop);
+        fbNext = (FloatingActionButton) view.findViewById(R.id.fbNext);
 
         tiempoRestante = traducirTiempo(sTiempo);
 
@@ -91,6 +97,7 @@ public class CuentaAtrasFragment extends Fragment {
 
         fbBotonCronometroPausa.hide();
         fbBotonCronometroStop.hide();
+
 
         fbBotonCronometroInicia.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -154,6 +161,8 @@ public class CuentaAtrasFragment extends Fragment {
         fbBotonCronometroStop.hide();
         fbBotonCronometroInicia.show();
         fbBotonCronometroPausa.hide();
+
+
 
     }
     public void pausaCronometro(View v){

@@ -10,77 +10,125 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Context;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
+import com.example.proyectodam.Model.Ejercicio;
+import com.example.proyectodam.Model.Entrenamiento;
 import com.example.proyectodam.databinding.ActivityEntrenamientoBinding;
 import com.example.proyectodam.ui.CronometroFragment;
 import com.example.proyectodam.ui.CuentaAtrasFragment;
+import com.example.proyectodam.ui.RepeticionesFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class EntrenamientoActivity extends AppCompatActivity {
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+public class EntrenamientoActivity extends AppCompatActivity  {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityEntrenamientoBinding binding;
-    GestionFicheros gestionFicheros;
-    Context c = this;
+    private GestionFicheros gestionFicheros;
+    private Entrenamiento entrenamiento;
+    private ArrayList<Ejercicio> alEjercicio = new ArrayList<Ejercicio>();
+    private Context context = this;
+    int contador =0;
 
-CronometroFragment cronometroFragment;
-CuentaAtrasFragment cuentaAtrasFragment;
+    private CronometroFragment cronometroFragment;
+    private CuentaAtrasFragment cuentaAtrasFragment;
+    private RepeticionesFragment repeticionesFragment;
+    private FloatingActionButton fbNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrenamiento);
+        fbNext = (FloatingActionButton) findViewById(R.id.fbNext);
 
-        cronometroFragment = new CronometroFragment();
-        cuentaAtrasFragment = new CuentaAtrasFragment();
+        //Cargamos el array List con los ejercicios del entrenamiento
+        alEjercicio = getAlEntrenamiento();
 
-       //Elegimos que fragment se verá
-        //Cargamos inicialmente cronometro
-        getSupportFragmentManager().beginTransaction().add(R.id.contenedor, cronometroFragment);
+        //Comprobamos el tipo del
+        verTipo(alEjercicio.get(contador).getcTipo(),
+                alEjercicio.get(contador).getsNombre(),
+                alEjercicio.get(contador).getsValor());
 
-        //Cambiamos a cuenta atras
-     /*   FragmentTransaction transition  = getSupportFragmentManager().beginTransaction();
-        transition.replace(R.id.contenedor, cuentaAtrasFragment);
-        transition.commit();*/
-
-
-        //Cambiamos a cuenta atras
-        FragmentTransaction transition  = getSupportFragmentManager().beginTransaction();
-        transition.replace(R.id.contenedor, cronometroFragment);
-        transition.commit();
-
-
-
-/*
-        binding = ActivityEntrenamientoBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);*/
 
     }
 
 
+
+    public void onClickNext(View v){
+
+        //Cuando pulsamos el boton para el siguiente ejercicio incrementamos el contador
+        //si aún quedan ejercicios para realizar obtenemos los datos del siguiente ejercicio
+        //de lo contrario volvemos a la pantalla inicial
+        contador ++;
+        if (contador < alEjercicio.size()){
+            verTipo(alEjercicio.get(contador).getcTipo(),
+                    alEjercicio.get(contador).getsNombre(),
+                    alEjercicio.get(contador).getsValor());
+        }
+        else{
+            startActivity(new Intent(EntrenamientoActivity.this, MainActivity.class));
+        }
+
+    }
+
+    public void verTipo (char tipo, String nombre, String valor){
+
+        //Cargamos el nuevo ejercicio que corresponda según su tipo
+        FragmentTransaction transition;
+        Bundle bundle = new Bundle();
+
+
+        switch(tipo) {
+            //Cronometro
+            case 'C':
+                cronometroFragment = new CronometroFragment();
+                bundle.putString("nombre", nombre);
+                bundle.putString("valor", valor);
+                bundle.putInt("pbProgress", 0);
+                cronometroFragment.setArguments(bundle);
+                transition  = getSupportFragmentManager().beginTransaction();
+                transition.replace(R.id.contenedor, cronometroFragment);
+                transition.commit();
+
+                break;
+
+            //Cuenta atras
+            case  'A':
+                cuentaAtrasFragment = new CuentaAtrasFragment();
+                transition  = getSupportFragmentManager().beginTransaction();
+                transition.replace(R.id.contenedor, cuentaAtrasFragment);
+                transition.commit();
+
+                break;
+
+
+           //Repeticiones
+            case  'R':
+
+                repeticionesFragment= new RepeticionesFragment();
+                bundle.putString("nombre", nombre);
+                bundle.putInt("valor", Integer.parseInt(valor));
+                bundle.putInt("pbProgress", 0);
+                repeticionesFragment.setArguments(bundle);
+                transition  = getSupportFragmentManager().beginTransaction();
+                transition.replace(R.id.contenedor, repeticionesFragment);
+                transition.commit();
+                break;
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate el menu
         getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
@@ -88,11 +136,54 @@ CuentaAtrasFragment cuentaAtrasFragment;
 
     @Override
     public boolean onSupportNavigateUp() {
+        //Navegación
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
+
+
+
+    public ArrayList<Ejercicio> getAlEntrenamiento() {
+
+     //  String sEntrenamiento =  gestionFicheros.leerFichero( "Entrenamiento", this, context);
+
+        ArrayList<Ejercicio> ejercicios = new ArrayList<Ejercicio> ();
+        Ejercicio ejercicio1 = new Ejercicio();
+        ejercicio1.setsNombre("Sentadillas");
+        ejercicio1.setcTipo('C');
+        ejercicio1.setsValor("01:00");
+        Ejercicio ejercicio2 = new Ejercicio();
+        ejercicio2.setsNombre("Zancada");
+        ejercicio2.setcTipo('A');
+        ejercicio2.setsValor("01:20");
+        Ejercicio ejercicio3 = new Ejercicio();
+        ejercicio3.setsNombre("Abdominal");
+        ejercicio3.setcTipo('R');
+        ejercicio3.setsValor("25");
+        Ejercicio ejercicio4 = new Ejercicio();
+        ejercicio4.setsNombre("Plancha");
+        ejercicio4.setcTipo('C');
+        ejercicio4.setsValor("01:40");
+
+        ejercicios.add(ejercicio1);
+        ejercicios.add(ejercicio2);
+        ejercicios.add(ejercicio3);
+        ejercicios.add(ejercicio4);
+
+        Entrenamiento e = new Entrenamiento();
+        e.setaEjercicio(ejercicios);
+
+
+        alEjercicio.add(ejercicio1);
+        alEjercicio.add(ejercicio2);
+        alEjercicio.add(ejercicio3);
+        alEjercicio.add(ejercicio4);
+
+
+        return alEjercicio;
+    }
 
 
 }

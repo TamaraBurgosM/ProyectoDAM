@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -22,7 +23,7 @@ public class GestionFicheros {
 
     static String direccion = Environment.getExternalStorageDirectory().toString();
 
-    private boolean validarPermisoEscritura(Activity activity){
+  /*  private boolean validarPermisoEscritura(Activity activity){
         int permissionCheck = ContextCompat.checkSelfPermission(
                 activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -33,62 +34,92 @@ public class GestionFicheros {
             Log.i("Mensaje", "Se tiene permiso para  escribir!");
             return true;
         }
+    }*/
+
+    private void pedirPermiso(Activity activity){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ActivityCompat.requestPermissions(activity, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,}, 2);
+        }else {
+            ActivityCompat.requestPermissions(activity, new String[] {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,}, 2);
+        }
     }
 
-    private boolean validarPermisoLectura(Activity activity){
-        int permissionCheck = ContextCompat.checkSelfPermission(
+
+    private boolean validarPermiso(Activity activity){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                pedirPermiso(activity);
+            }
+        }
+            return true;
+
+
+
+        /*int permissionCheck = ContextCompat.checkSelfPermission(
                 activity, Manifest.permission.READ_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            Log.i("Mensaje", "No se tiene permiso para leer.");
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 225);
             return false;
         } else {
-            Log.i("Mensaje", "Se tiene permiso para leer y escribir!");
             return true;
-        }
+        }*/
     }
 
     public String leerFichero(String nombreFichero, Activity activity, Context c) {
+        StringBuilder datos = new StringBuilder("");
+        boolean permiso = validarPermiso(activity);
 
-        StringBuilder datos= new StringBuilder("No hay datos");
+            if (permiso) {
+               // if(archivoExiste(nombreFichero)) {
 
-        if (validarPermisoLectura(activity)) {
+                try {
+                    FileInputStream fis = c.openFileInput(nombreFichero);
+                    InputStreamReader inputStreamReader =
+                            new InputStreamReader(fis, StandardCharsets.UTF_8);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    BufferedReader reader = new BufferedReader(inputStreamReader);
+                    String line = reader.readLine();
+                    datos = line != null ? datos.append("") : datos.append("No hay datos");
 
-            try {
-                FileInputStream fis = c.openFileInput(nombreFichero);
-                InputStreamReader inputStreamReader =
-                        new InputStreamReader(fis, StandardCharsets.UTF_8);
-                StringBuilder stringBuilder = new StringBuilder();
-                BufferedReader reader = new BufferedReader(inputStreamReader);
-                String line = reader.readLine();
-                while (line != null) {
-                    stringBuilder.append(line).append('\n');
-                    datos.append(line);
-                    line = reader.readLine();
-                }
+                    while (line != null) {
+                        stringBuilder.append(line).append('\n');
+                        datos.append(line);
+                        line = reader.readLine();
+                    }
 
-                 //   datos= stringBuilder.toString();
-                System.out.println("RUTA: "+ c.getPackageResourcePath());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        return datos.toString();
-    }
-
-
-    public void guardarFichero(String nombreFichero, String datos, Activity activity, Context c) {
-
-
-        if(validarPermisoEscritura(activity)) {
-             try (FileOutputStream fos = c.openFileOutput(nombreFichero, Context.MODE_PRIVATE)) {
-                    fos.write(datos.getBytes(StandardCharsets.UTF_8));
+                    //   datos= stringBuilder.toString();
+                    //System.out.println("RUTA: "+ c.getPackageResourcePath());
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+            }
+      //  }
+        return datos.toString();
+    }
+
+
+    public void guardarFichero(String nombreFichero, String entrada, Activity activity, Context c) {
+
+        String datos = leerFichero(nombreFichero,activity,c) + entrada  ;
+
+        boolean permiso = validarPermiso(activity);
+       if(permiso) {
+           try (FileOutputStream fos = c.openFileOutput(nombreFichero, Context.MODE_PRIVATE)) {
+               fos.write(datos.getBytes(StandardCharsets.UTF_8));
+
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
 
            /* BufferedWriter out = null;
 
@@ -105,7 +136,7 @@ public class GestionFicheros {
                     e.printStackTrace();
                 }*/
 
-        }
+       // }
 
 
     }
@@ -126,11 +157,9 @@ public class GestionFicheros {
     /*
      * Metodo que comprueba que el archivo existe en nuesto directorio
      * */
-    private boolean ArchivoExiste(String nombreFichero) {
+    private boolean archivoExiste(String nombreFichero) {
 
         File fichero = new File(direccion+"/"+nombreFichero);
-
-        //FileOutputStream fileOutputStream = null;
         if(!fichero.exists()){
             try {
                 fichero.createNewFile();

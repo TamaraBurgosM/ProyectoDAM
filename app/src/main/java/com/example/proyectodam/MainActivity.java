@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.proyectodam.Model.Ejercicio;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -18,12 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectodam.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     GestionFicheros gestionFicheros;
     Context c = this;
+    ArrayList<Ejercicio> alDatosEjercicio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    //    .setAction("Action", null).show();
-
 
                 startActivity(new Intent(MainActivity.this, EntrenamientoActivity.class));
             }
@@ -57,6 +59,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         setUpView();
+
+        if(!alDatosEjercicio.isEmpty()) {
+            //Rellenamos la lista
+            ListView lista = (ListView) findViewById(R.id.lvLista);
+            lista.setAdapter(new ListaAdaptador(this, R.layout.content_lista_entrenamientos, alDatosEjercicio) {
+                @Override
+                public void onEntrada(Object entrada, View view) {
+                    TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreEjercicio);
+                    tvNombre.setText(((Ejercicio) entrada).getsNombre());
+
+                    TextView tvTipo = (TextView) view.findViewById(R.id.tvTipoEjercicio);
+                    tvTipo.setText(((Ejercicio) entrada).getcTipo() + "");
+
+                    TextView tvValor = (TextView) view.findViewById(R.id.tvCantidadEjercicio);
+                    tvValor.setText(((Ejercicio) entrada).getsValor());
+
+                }
+            });
+        }
     }
 
     @Override
@@ -78,8 +99,24 @@ public class MainActivity extends AppCompatActivity {
 
         TextView etRecuperarDatos = findViewById(R.id.text_home);
         gestionFicheros = new GestionFicheros();
+        alDatosEjercicio= new ArrayList<Ejercicio>();
+        Ejercicio ejercicio ;
 
         String texto = gestionFicheros.leerFichero("Ejercicios",this, c);
         etRecuperarDatos.setText(texto);
+
+        if(!texto.isEmpty()) {
+            String[] split = texto.split(";");
+
+            for (int i = 0; i < split.length; i = i + 4) {
+                ejercicio = new Ejercicio();
+                ejercicio.setcTipo(split[i + 1].charAt(0));
+                ejercicio.setsNombre(split[i + 2]);
+                ejercicio.setsValor(split[i + 3]);
+                alDatosEjercicio.add(ejercicio);
+
+            }
+        }
+
     }
 }
