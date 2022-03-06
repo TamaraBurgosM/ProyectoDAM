@@ -22,20 +22,7 @@ public class NuevoEjercicioFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-       /* NuevoEjercicioViewModel nuevoEjercicioViewModel =
-                new ViewModelProvider(this).get(NuevoEjercicioViewModel.class);
 
-        binding = FragmentNuevoejercicioBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textGallery;
-        nuevoEjercicioViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
-
-        Intent intent = new Intent(getActivity(), NuevoEjercicioActivity.class);
-        getActivity().startActivity(intent);
-
-        return root;*/
         View v = inflater.inflate(R.layout.fragment_nuevoejercicio, container, false);
 
         TextView tv = v.findViewById(R.id.textView);

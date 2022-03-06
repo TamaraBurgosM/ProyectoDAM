@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CuentaAtrasFragment">
+    tools:context=".ui.RepeticionesFragment">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,7 +19,7 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="20dp"
             android:textSize="25dp"
-            android:text="NombreEjercicio"
+            android:text="NombreRepeticiones"
             android:textColor="@color/black" />
 
         <ProgressBar
@@ -29,38 +30,19 @@
             android:layout_centerInParent="true"
             android:background="@drawable/circulo_fin"
             android:indeterminate="false"
-            android:max="60000"
-            android:progress="0"
+            android:max="100"
+            android:progress="50"
             android:progressDrawable="@drawable/circulo_ini"
             android:rotation="-90"/>
 
 
-
         <TextView
-            android:id="@+id/etTiempoPrevio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tvCuentaAtras"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/accentColor" />
-
-        <!--  <TextView
-              android:id="@+id/tvVista"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerInParent="true"
-              android:text="00:00:00"
-              android:textColor="@color/accentColor"
-              android:textSize="30sp" />-->
-
-        <TextView
-            android:id="@+id/tvCuentaAtras"
+            android:id="@+id/tvRepeticiones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:countDown="false"
-            android:hint="00:00"
+            android:hint="0"
             android:textColor="@color/accentColor"
             android:textSize="30sp" />
 
@@ -101,5 +83,6 @@
 
 
     </RelativeLayout>
+
 
 </FrameLayout>

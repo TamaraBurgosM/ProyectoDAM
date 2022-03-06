@@ -15,7 +15,6 @@ public class NuevoEjercicioViewModel extends ViewModel {
 
     public NuevoEjercicioViewModel() {
         mText = new MutableLiveData<>();
-       // mText.setValue("This is gallery fragment");
 
     }
 

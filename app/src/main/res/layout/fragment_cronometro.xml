@@ -11,6 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tvNombreEjercicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/pbProgress"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20dp"
+            android:text="NombreEjercicio"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
         <ProgressBar
             android:id="@+id/pbProgress"
             style="?android:progressBarStyleHorizontal"
@@ -19,11 +30,21 @@
             android:layout_centerInParent="true"
             android:background="@drawable/circulo_fin"
             android:indeterminate="false"
-            android:max="100"
-            android:progress="50"
+            android:max="60000"
+            android:progress="0"
             android:progressDrawable="@drawable/circulo_ini"
             android:rotation="-90" />
 
+        <TextView
+            android:id="@+id/tvPausa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/chCronometro"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="20dp"
+            android:text="00:00:00"
+            android:textColor="@color/accentColor"
+            android:textSize="20dp" />
 
         <Chronometer
             android:id="@+id/chCronometro"
@@ -39,11 +60,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="113dp"
             android:layout_marginBottom="16dp"
-            android:onClick="inicioCronometro"
-            android:contentDescription="TODO"
 
+            android:contentDescription="TODO"
+            android:onClick="inicioCronometro"
             app:srcCompat="@android:drawable/ic_media_play" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -51,11 +73,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="113dp"
             android:layout_marginBottom="16dp"
+            android:contentDescription="TODO"
             android:onClick="pausaCronometro"
-            app:srcCompat="@android:drawable/ic_media_pause"
-            android:contentDescription="TODO" />
+            app:srcCompat="@android:drawable/ic_media_pause" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fbBotonCronometroStop"
@@ -63,9 +86,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
             android:layout_alignEnd="@id/pbProgress"
+            android:layout_marginTop="113dp"
+            android:layout_marginEnd="-10dp"
+            android:contentDescription="TODO"
             android:onClick="finCronometro"
-            app:srcCompat="@android:drawable/ic_delete"
-            android:contentDescription="TODO" />
+            app:srcCompat="@android:drawable/ic_delete" />
 
     </RelativeLayout>
 
