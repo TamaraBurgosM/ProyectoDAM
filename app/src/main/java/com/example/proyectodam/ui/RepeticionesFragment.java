@@ -1,13 +1,8 @@
 package com.example.proyectodam.ui;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.hardware.TriggerEvent;
 import android.hardware.TriggerEventListener;
 import android.os.Bundle;
 
@@ -100,7 +95,7 @@ public class RepeticionesFragment extends Fragment  {
         tvNombre.setText(nombre);
 
         tvRepeticiones = (TextView) view.findViewById(R.id.tvRepeticiones);
-        tvRepeticiones.setText(""+valor);
+        tvRepeticiones.setText("" + valor);
 
         pbProgress = (ProgressBar) view.findViewById(R.id.pbProgress);
         pbProgress.setProgress(progressBar);

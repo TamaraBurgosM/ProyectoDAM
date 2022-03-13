@@ -46,15 +46,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".NuevoEjercicioActivity"
-            android:exported="false"
-            android:label="@string/menu_nuevoEjercicio" />
-        <activity
-            android:name=".AddEntenamiento"
-            android:exported="false"
-            android:label="@string/title_activity_add_entenamiento"
-            android:theme="@style/Theme.ProyectoDAM.NoActionBar" />
+
         <activity
             android:name=".EntrenamientoActivity"
             android:exported="false" />

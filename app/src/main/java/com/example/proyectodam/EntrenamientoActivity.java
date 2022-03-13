@@ -1,8 +1,6 @@
 package com.example.proyectodam;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -11,51 +9,49 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.proyectodam.Model.Ejercicio;
-import com.example.proyectodam.Model.Entrenamiento;
-import com.example.proyectodam.databinding.ActivityEntrenamientoBinding;
 import com.example.proyectodam.ui.CronometroFragment;
 import com.example.proyectodam.ui.CuentaAtrasFragment;
 import com.example.proyectodam.ui.RepeticionesFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EntrenamientoActivity extends AppCompatActivity  {
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityEntrenamientoBinding binding;
     private GestionFicheros gestionFicheros;
-    private Entrenamiento entrenamiento;
     private ArrayList<Ejercicio> alEjercicio = new ArrayList<Ejercicio>();
-    private Context context = this;
+    private final Context context = this;
     int contador =0;
-
-    private CronometroFragment cronometroFragment;
-    private CuentaAtrasFragment cuentaAtrasFragment;
-    private RepeticionesFragment repeticionesFragment;
-    private FloatingActionButton fbNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrenamiento);
-        fbNext = (FloatingActionButton) findViewById(R.id.fbNext);
+        gestionFicheros= new GestionFicheros();
+        FloatingActionButton fbNext = (FloatingActionButton) findViewById(R.id.fbNext);
 
         //Cargamos el array List con los ejercicios del entrenamiento
         alEjercicio = getAlEntrenamiento();
 
-        //Comprobamos el tipo del
-        verTipo(alEjercicio.get(contador).getcTipo(),
-                alEjercicio.get(contador).getsNombre(),
-                alEjercicio.get(contador).getsValor());
+        if(alEjercicio.isEmpty())
+        {
+            Toast.makeText(context, "No hay entrenamiento configurado", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(EntrenamientoActivity.this, MainActivity.class));
+
+        }
+        else {
+            //Comprobamos el tipo del
+            verTipo(alEjercicio.get(contador).getcTipo(),
+                    alEjercicio.get(contador).getsNombre(),
+                    alEjercicio.get(contador).getsValor());
+        }
 
 
     }
@@ -89,7 +85,7 @@ public class EntrenamientoActivity extends AppCompatActivity  {
         switch(tipo) {
             //Cronometro
             case 'C':
-                cronometroFragment = new CronometroFragment();
+                CronometroFragment cronometroFragment = new CronometroFragment();
                 bundle.putString("nombre", nombre);
                 bundle.putString("valor", valor);
                 bundle.putInt("pbProgress", 0);
@@ -102,7 +98,11 @@ public class EntrenamientoActivity extends AppCompatActivity  {
 
             //Cuenta atras
             case  'A':
-                cuentaAtrasFragment = new CuentaAtrasFragment();
+                CuentaAtrasFragment cuentaAtrasFragment = new CuentaAtrasFragment();
+                bundle.putString("nombre", nombre);
+                bundle.putString("valor", valor);
+                bundle.putInt("pbProgress", 0);
+                cuentaAtrasFragment.setArguments(bundle);
                 transition  = getSupportFragmentManager().beginTransaction();
                 transition.replace(R.id.contenedor, cuentaAtrasFragment);
                 transition.commit();
@@ -113,7 +113,7 @@ public class EntrenamientoActivity extends AppCompatActivity  {
            //Repeticiones
             case  'R':
 
-                repeticionesFragment= new RepeticionesFragment();
+                RepeticionesFragment repeticionesFragment = new RepeticionesFragment();
                 bundle.putString("nombre", nombre);
                 bundle.putInt("valor", Integer.parseInt(valor));
                 bundle.putInt("pbProgress", 0);
@@ -147,39 +147,32 @@ public class EntrenamientoActivity extends AppCompatActivity  {
 
     public ArrayList<Ejercicio> getAlEntrenamiento() {
 
-     //  String sEntrenamiento =  gestionFicheros.leerFichero( "Entrenamiento", this, context);
+       String sEntrenamiento =  gestionFicheros.leerFichero( "Entrenamiento", this, context);
 
-        ArrayList<Ejercicio> ejercicios = new ArrayList<Ejercicio> ();
-        Ejercicio ejercicio1 = new Ejercicio();
-        ejercicio1.setsNombre("Sentadillas");
-        ejercicio1.setcTipo('C');
-        ejercicio1.setsValor("01:00");
-        Ejercicio ejercicio2 = new Ejercicio();
-        ejercicio2.setsNombre("Zancada");
-        ejercicio2.setcTipo('A');
-        ejercicio2.setsValor("01:20");
-        Ejercicio ejercicio3 = new Ejercicio();
-        ejercicio3.setsNombre("Abdominal");
-        ejercicio3.setcTipo('R');
-        ejercicio3.setsValor("25");
-        Ejercicio ejercicio4 = new Ejercicio();
-        ejercicio4.setsNombre("Plancha");
-        ejercicio4.setcTipo('C');
-        ejercicio4.setsValor("01:40");
+       String[]sId= sEntrenamiento.split(";");
 
-        ejercicios.add(ejercicio1);
-        ejercicios.add(ejercicio2);
-        ejercicios.add(ejercicio3);
-        ejercicios.add(ejercicio4);
+        Ejercicio ejercicio;
 
-        Entrenamiento e = new Entrenamiento();
-        e.setaEjercicio(ejercicios);
+        String texto = gestionFicheros.leerFichero("Ejercicios", this, context);
 
+        if(!sEntrenamiento.isEmpty() && !texto.isEmpty()) {
+            String[] split = texto.split(";");
 
-        alEjercicio.add(ejercicio1);
-        alEjercicio.add(ejercicio2);
-        alEjercicio.add(ejercicio3);
-        alEjercicio.add(ejercicio4);
+            for (int i = 0; i < split.length; i = i + 4) {
+                ejercicio = new Ejercicio();
+
+                if (Arrays.asList(sId).contains(split[i])) {
+                    ejercicio.setiId(Integer.parseInt(split[i]));
+                    ejercicio.setcTipo(split[i + 1].charAt(0));
+                    ejercicio.setsNombre(split[i + 2]);
+                    ejercicio.setsValor(split[i + 3]);
+                    alEjercicio.add(ejercicio);
+                }
+
+            }
+
+        }
+
 
 
         return alEjercicio;

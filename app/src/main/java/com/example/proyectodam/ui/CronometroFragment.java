@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +23,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * create an instance of this fragment.
  */
 public class CronometroFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "nombre";
-    private static final String ARG_PARAM2 = "valor";
-    private static final String ARG_PARAM3 = "progressBar";
+    private static final String ARG_NOMBRE = "nombre";
+    private static final String ARG_VALOR = "valor";
+    private static final String ARG_PROGRESO = "progressBar";
 
-    // TODO: Rename and change types of parameters
     private String nombre;
     private String valor;
     private int progressBar;
-
 
 
     private Chronometer chCronometro;
@@ -44,11 +39,7 @@ public class CronometroFragment extends Fragment {
     private FloatingActionButton fbBotonCronometroPausa;
     private FloatingActionButton fbBotonCronometroStop;
     private FloatingActionButton fbNext;
-    private TextView tvPausa;
     private ProgressBar pbProgress;
-    private View v;
-    private View view;
-    private TextView tvNombre;
 
     public CronometroFragment() {
     }
@@ -57,17 +48,17 @@ public class CronometroFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param nombre Parameter 1.
-     * @param valor Parameter 2.
+     * @param nombre ARG_NOMBRE.
+     * @param valor ARG_VALOR.
+     * @param progressBar ARG_PROGRESO.
      * @return A new instance of fragment CronometroFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CronometroFragment newInstance(String nombre, String valor, int progressBar) {
         CronometroFragment fragment = new CronometroFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, nombre);
-        args.putString(ARG_PARAM2, valor);
-        args.putInt(ARG_PARAM3, progressBar);
+        args.putString(ARG_NOMBRE, nombre);
+        args.putString(ARG_VALOR, valor);
+        args.putInt(ARG_PROGRESO, progressBar);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,19 +68,19 @@ public class CronometroFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            nombre = getArguments().getString(ARG_PARAM1);
-            valor = getArguments().getString(ARG_PARAM2);
-            progressBar = getArguments().getInt(ARG_PARAM3);
+            nombre = getArguments().getString(ARG_NOMBRE);
+            valor = getArguments().getString(ARG_VALOR);
+            progressBar = getArguments().getInt(ARG_PROGRESO);
         }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        tvNombre  = (TextView) view.findViewById(R.id.tvNombreEjercicio);
+        TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreEjercicio);
         tvNombre.setText(nombre);
 
-        tvPausa = (TextView) view.findViewById(R.id.tvPausa);
+        TextView tvPausa = (TextView) view.findViewById(R.id.tvPausa);
         tvPausa.setText(valor);
 
         pbProgress = (ProgressBar) view.findViewById(R.id.pbProgress);
@@ -110,14 +101,14 @@ public class CronometroFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_cronometro, container, false);
-        view = inflater.inflate(R.layout.activity_entrenamiento, container, false);
-        chCronometro = (Chronometer) v.findViewById(R.id.chCronometro);
-        fbBotonCronometroInicia = (FloatingActionButton) v.findViewById(R.id.fbBotonCronometroInicia);
-        fbBotonCronometroPausa = (FloatingActionButton) v.findViewById(R.id.fbBotonCronometroPausa);
-        fbBotonCronometroStop = (FloatingActionButton) v.findViewById(R.id.fbBotonCronometroStop);
-        fbNext = (FloatingActionButton) view.findViewById(R.id.fbNext);
-        pbProgress = (ProgressBar) v.findViewById(R.id.pbProgress);
+        View vCronometro = inflater.inflate(R.layout.fragment_cronometro, container, false);
+        View vEntrenamiento = inflater.inflate(R.layout.activity_entrenamiento, container, false);
+        chCronometro = (Chronometer) vCronometro.findViewById(R.id.chCronometro);
+        fbBotonCronometroInicia = (FloatingActionButton) vCronometro.findViewById(R.id.fbBotonCronometroInicia);
+        fbBotonCronometroPausa = (FloatingActionButton) vCronometro.findViewById(R.id.fbBotonCronometroPausa);
+        fbBotonCronometroStop = (FloatingActionButton) vCronometro.findViewById(R.id.fbBotonCronometroStop);
+        fbNext = (FloatingActionButton) vEntrenamiento.findViewById(R.id.fbNext);
+        pbProgress = (ProgressBar) vCronometro.findViewById(R.id.pbProgress);
 
 
 
@@ -130,41 +121,26 @@ public class CronometroFragment extends Fragment {
         chCronometro.setFormat("Time: %");
         chCronometro.setBase(SystemClock.elapsedRealtime());
 
-        chCronometro.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                pbProgress.setProgress( pbProgress.getProgress() + 1000);
-                if((SystemClock.elapsedRealtime() - chronometer.getBase())>= 60000){
+        chCronometro.setOnChronometerTickListener(chronometer -> {
+            pbProgress.setProgress( pbProgress.getProgress() + 1000);
+            if((SystemClock.elapsedRealtime() - chronometer.getBase())>= 60000){
 
-                    pbProgress.setProgress(0);
-                    lPauseOffset = 0;
+                pbProgress.setProgress(0);
+                lPauseOffset = 0;
 
-                }
             }
         });
 
-        fbBotonCronometroInicia.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                inicioCronometro(v);
-            }
-        });
+        fbBotonCronometroInicia.setOnClickListener(v -> inicioCronometro());
 
-        fbBotonCronometroPausa.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                pausaCronometro(v);
-            }
-        });
+        fbBotonCronometroPausa.setOnClickListener(v -> pausaCronometro());
 
 
-        fbBotonCronometroStop.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                finCronometro(v);
-            }
-        });
+        fbBotonCronometroStop.setOnClickListener(v -> finCronometro());
 
-        return v;
+        return vCronometro;
     }
-    public void inicioCronometro(View v){
+    public void inicioCronometro(){
         if(!bRunning) {
             chCronometro.setBase(SystemClock.elapsedRealtime() - lPauseOffset);
             chCronometro.start();
@@ -175,7 +151,7 @@ public class CronometroFragment extends Fragment {
             fbNext.hide();
         }
     }
-    public void finCronometro(View v){
+    public void finCronometro(){
 
 
         chCronometro.setBase(SystemClock.elapsedRealtime());
@@ -189,7 +165,7 @@ public class CronometroFragment extends Fragment {
         fbNext.show();
 
     }
-    public void pausaCronometro(View v){
+    public void pausaCronometro(){
         if (bRunning){
             chCronometro.stop();
 
