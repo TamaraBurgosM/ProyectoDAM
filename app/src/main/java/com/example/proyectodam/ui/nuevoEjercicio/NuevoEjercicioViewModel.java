@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.proyectodam.NuevoEjercicioActivity;
 
 public class NuevoEjercicioViewModel extends ViewModel {
 

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -48,7 +47,7 @@ public class GestionFicheros {
     }
 
 
-    private boolean validarPermiso(Activity activity){
+    private boolean validarPermiso(Activity activity) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
@@ -58,7 +57,8 @@ public class GestionFicheros {
                 pedirPermiso(activity);
             }
         }
-            return true;
+        return true;
+
 
 
 
@@ -121,6 +121,7 @@ public class GestionFicheros {
            }
        }
 
+
            /* BufferedWriter out = null;
 
                 try  {
@@ -140,7 +141,19 @@ public class GestionFicheros {
 
 
     }
+    public void guardarFicheroSimple(String nombreFichero, String datos, Activity activity, Context c) {
 
+        boolean permiso = validarPermiso(activity);
+        if(permiso) {
+            try (FileOutputStream fos = c.openFileOutput(nombreFichero, Context.MODE_PRIVATE)) {
+                fos.write(datos.getBytes(StandardCharsets.UTF_8));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
     /*
      * Metodo que crea el archivo si aun no existe
      * */
