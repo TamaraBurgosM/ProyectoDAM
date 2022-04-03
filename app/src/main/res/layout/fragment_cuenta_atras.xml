@@ -17,8 +17,8 @@
             android:layout_above="@+id/pbProgress"
             android:layout_centerInParent="true"
             android:layout_marginBottom="20dp"
-            android:textSize="25dp"
-            android:text="NombreEjercicio"
+            android:textSize="25sp"
+            android:text=""
             android:textColor="@color/black" />
 
         <ProgressBar
@@ -34,10 +34,8 @@
             android:progressDrawable="@drawable/circulo_ini"
             android:rotation="-90"/>
 
-
-
         <TextView
-            android:id="@+id/etTiempoPrevio"
+            android:id="@+id/tvTiempoPrevio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tvCuentaAtras"
@@ -45,59 +43,50 @@
             android:layout_marginBottom="20dp"
             android:textColor="@color/accentColor" />
 
-        <!--  <TextView
-              android:id="@+id/tvVista"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerInParent="true"
-              android:text="00:00:00"
-              android:textColor="@color/accentColor"
-              android:textSize="30sp" />-->
-
         <TextView
             android:id="@+id/tvCuentaAtras"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:countDown="false"
-            android:hint="00:00"
+            android:hint="@string/_00_00"
             android:textColor="@color/accentColor"
             android:textSize="30sp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fbBotonCronometroInicia"
+            android:id="@+id/fabBotonCuentaAtrasInicia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
             android:layout_centerInParent="true"
             android:layout_marginBottom="16dp"
-            android:onClick="inicioCronometro"
+            android:onClick="inicioCuentaAtras"
             android:layout_marginTop="113dp"
             app:srcCompat="@android:drawable/ic_media_play"
-            android:contentDescription="TODO" />
+            android:contentDescription="@string/boton_inicio" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fbBotonCronometroPausa"
+            android:id="@+id/fabBotonCuentaAtrasPausa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
             android:layout_centerInParent="true"
             android:layout_marginTop="113dp"
             android:layout_marginBottom="16dp"
-            android:onClick="pausaCronometro"
+            android:onClick="pausaCuentaAtras"
             app:srcCompat="@android:drawable/ic_media_pause"
-            android:contentDescription="TODO" />
+            android:contentDescription="@string/boton_pausa" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fbBotonCronometroStop"
+            android:id="@+id/fabBotonCuentaAtrasStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
             android:layout_alignEnd="@id/pbProgress"
             android:layout_marginTop="113dp"
-            android:onClick="finCronometro"
+            android:onClick="finCuentaAtras"
             app:srcCompat="@android:drawable/ic_delete"
-            android:contentDescription="TODO" />
+            android:contentDescription="@string/boton_stop" />
 
 
     </RelativeLayout>

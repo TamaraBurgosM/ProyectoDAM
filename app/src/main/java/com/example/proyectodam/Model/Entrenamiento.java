@@ -1,10 +1,10 @@
-package com.example.proyectodam.Model;
+package com.example.proyectodam.model;
 
 import java.util.ArrayList;
 
 public class Entrenamiento {
 
-    public int iId;
+    public String iId;
     public String sNombre;
     public ArrayList <Ejercicio> aEjercicio;
 
@@ -14,17 +14,20 @@ public class Entrenamiento {
         this.aEjercicio = aEjercicio;
     }
 
-    public Entrenamiento(int iId, String sNombre, ArrayList<Ejercicio> aEjercicio) {
+    public Entrenamiento(String iId, String sNombre, ArrayList<Ejercicio> aEjercicio) {
         this.iId = iId;
         this.sNombre = sNombre;
         this.aEjercicio = aEjercicio;
     }
+    public Entrenamiento(String ejercicio) {
 
-    public int getiId() {
+    }
+
+    public String getiId() {
         return iId;
     }
 
-    public void setiId(int iId) {
+    public void setiId(String iId) {
         this.iId = iId;
     }
 

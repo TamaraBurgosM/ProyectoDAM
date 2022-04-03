@@ -9,52 +9,44 @@
     android:layout_marginTop="25dp"
     android:orientation="vertical"
     android:layout_marginRight="25dp"
+    android:layout_marginBottom="25dp"
     android:layout_marginLeft="25dp"
     tools:context=".ui.home.HomeFragment">
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="15dp"
-    android:orientation="horizontal">
-    <ListView
-        android:id="@+id/lvLista"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fab">
-    </ListView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginVertical="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@android:drawable/ic_media_play"
-        tools:layout_editor_absoluteX="177dp"
-        tools:layout_editor_absoluteY="603dp"
-        android:contentDescription="TODO" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/entrenamiento_configurado"
+            android:fontFamily="serif-monospace"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
-</RelativeLayout>
+        <ListView
+            android:id="@+id/lvLista"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/fabEmpezar"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabEmpezar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="20dp"
+            android:contentDescription="@string/boton_empezar"
+            app:srcCompat="@android:drawable/ic_media_play"  />
 
-
-
-    <!--<TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
-
+    </RelativeLayout>
 
 </LinearLayout>
