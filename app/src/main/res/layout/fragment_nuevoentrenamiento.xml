@@ -7,9 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.nuevoEntrenamiento.NuevoEntrenamientoFragment">
 
-
-
         <include layout="@layout/nuevo_entrenamiento_content"/>
-
 
 </LinearLayout>

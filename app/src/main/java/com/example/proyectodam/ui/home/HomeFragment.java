@@ -16,21 +16,19 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.proyectodam.EntrenamientoActivity;
 import com.example.proyectodam.GestionFicheros;
 import com.example.proyectodam.ListaAdaptador;
-import com.example.proyectodam.MainActivity;
-import com.example.proyectodam.Model.Ejercicio;
+import com.example.proyectodam.model.Ejercicio;
 import com.example.proyectodam.R;
 import com.example.proyectodam.databinding.FragmentHomeBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    GestionFicheros gestionFicheros;
-    private  Context c;
-
-    ArrayList<Ejercicio> alDatosEjercicio;
+    private  Context context;
+    private ArrayList<Ejercicio> alDatosEjercicio;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,9 +38,9 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        c= root.getContext();
+        context = root.getContext();
 
-        FloatingActionButton start = (FloatingActionButton) root.findViewById(R.id.fab);
+        FloatingActionButton start = (FloatingActionButton) root.findViewById(R.id.fabEmpezar);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,8 +60,22 @@ public class HomeFragment extends Fragment {
                     TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreEjercicio);
                     tvNombre.setText(((Ejercicio) entrada).getsNombre());
 
+                    String tipo="";
+                    switch (((Ejercicio) entrada).getcTipo()){
+                        case 'C':
+                            tipo = getString(R.string.cronometro);
+                            break;
+                        case 'A':
+                            tipo = getString(R.string.cuantaAtras);
+                            break;
+                        case 'R':
+                            tipo = getString(R.string.repeticiones);
+                            break;
+
+                    }
+
                     TextView tvTipo = (TextView) view.findViewById(R.id.tvTipoEjercicio);
-                    tvTipo.setText(((Ejercicio) entrada).getcTipo() + "");
+                    tvTipo.setText(tipo);
 
                     TextView tvValor = (TextView) view.findViewById(R.id.tvCantidadEjercicio);
                     tvValor.setText(((Ejercicio) entrada).getsValor());
@@ -86,11 +98,11 @@ public class HomeFragment extends Fragment {
     private void setUpView(){
 
         // TextView etRecuperarDatos = findViewById(R.id.text_home);
-        gestionFicheros = new GestionFicheros();
-        alDatosEjercicio= new ArrayList<Ejercicio>();
-        Ejercicio ejercicio ;
+        GestionFicheros gestionFicheros = new GestionFicheros();
+        alDatosEjercicio = new ArrayList<Ejercicio>();
+       /* Ejercicio ejercicio ;
 
-        String texto = gestionFicheros.leerFichero("Ejercicios",getActivity(), c);
+        String texto = gestionFicheros.leerFichero(getString(R.string.ficheroEntrenamiento),getActivity(), c);
         //  etRecuperarDatos.setText(texto);
 
         if(!texto.isEmpty()) {
@@ -104,6 +116,32 @@ public class HomeFragment extends Fragment {
                 alDatosEjercicio.add(ejercicio);
 
             }
+        }*/
+        String sEntrenamiento =  gestionFicheros.leerFichero( getString(R.string.ficheroEntrenamiento),getActivity(), context);
+
+        String[]sId= sEntrenamiento.split(";");
+
+        Ejercicio ejercicio;
+
+        String texto = gestionFicheros.leerFichero(getString(R.string.ficheroEjercicios),getActivity(), context);
+
+        if(!sEntrenamiento.isEmpty() && !texto.isEmpty()) {
+
+            String[] split = texto.split(";");
+
+            for (int i = 0; i < split.length; i = i + 4) {
+                ejercicio = new Ejercicio();
+
+                if (Arrays.asList(sId).contains(split[i])) {
+                    ejercicio.setiId(Integer.parseInt(split[i]));
+                    ejercicio.setcTipo(split[i + 1].charAt(0));
+                    ejercicio.setsNombre(split[i + 2]);
+                    ejercicio.setsValor(split[i + 3]);
+                    alDatosEjercicio.add(ejercicio);
+                }
+
+            }
+
         }
 
     }

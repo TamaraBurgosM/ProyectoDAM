@@ -1,7 +1,6 @@
 package com.example.proyectodam.ui;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.proyectodam.R;
+import com.example.proyectodam.interfaces.PassDataI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
@@ -23,6 +23,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * create an instance of this fragment.
  */
 public class CronometroFragment extends Fragment {
+    PassDataI passData;
+
     private static final String ARG_NOMBRE = "nombre";
     private static final String ARG_VALOR = "valor";
     private static final String ARG_PROGRESO = "progressBar";
@@ -31,17 +33,21 @@ public class CronometroFragment extends Fragment {
     private String valor;
     private int progressBar;
 
-
     private Chronometer chCronometro;
     private boolean bRunning;
     private long lPauseOffset;
     private FloatingActionButton fbBotonCronometroInicia;
     private FloatingActionButton fbBotonCronometroPausa;
     private FloatingActionButton fbBotonCronometroStop;
-    private FloatingActionButton fbNext;
     private ProgressBar pbProgress;
 
+    public CronometroFragment(PassDataI passData) {
+        this.passData = passData;
+
+    }
+
     public CronometroFragment() {
+
     }
 
     /**
@@ -104,13 +110,10 @@ public class CronometroFragment extends Fragment {
         View vCronometro = inflater.inflate(R.layout.fragment_cronometro, container, false);
         View vEntrenamiento = inflater.inflate(R.layout.activity_entrenamiento, container, false);
         chCronometro = (Chronometer) vCronometro.findViewById(R.id.chCronometro);
-        fbBotonCronometroInicia = (FloatingActionButton) vCronometro.findViewById(R.id.fbBotonCronometroInicia);
-        fbBotonCronometroPausa = (FloatingActionButton) vCronometro.findViewById(R.id.fbBotonCronometroPausa);
-        fbBotonCronometroStop = (FloatingActionButton) vCronometro.findViewById(R.id.fbBotonCronometroStop);
-        fbNext = (FloatingActionButton) vEntrenamiento.findViewById(R.id.fbNext);
+        fbBotonCronometroInicia = (FloatingActionButton) vCronometro.findViewById(R.id.fabBotonCuentaAtrassInicia);
+        fbBotonCronometroPausa = (FloatingActionButton) vCronometro.findViewById(R.id.fabBotonCuentaAtrasPausa);
+        fbBotonCronometroStop = (FloatingActionButton) vCronometro.findViewById(R.id.fabBotonCuentaAtrasStop);
         pbProgress = (ProgressBar) vCronometro.findViewById(R.id.pbProgress);
-
-
 
         pbProgress.setProgress(0);
         pbProgress.setMax(60000);
@@ -125,21 +128,26 @@ public class CronometroFragment extends Fragment {
             pbProgress.setProgress( pbProgress.getProgress() + 1000);
             if((SystemClock.elapsedRealtime() - chronometer.getBase())>= 60000){
 
+                pbProgress = (ProgressBar) vCronometro.findViewById(R.id.pbProgress);
                 pbProgress.setProgress(0);
+                pbProgress.setMax(60000);
                 lPauseOffset = 0;
 
             }
         });
 
+
         fbBotonCronometroInicia.setOnClickListener(v -> inicioCronometro());
 
         fbBotonCronometroPausa.setOnClickListener(v -> pausaCronometro());
-
 
         fbBotonCronometroStop.setOnClickListener(v -> finCronometro());
 
         return vCronometro;
     }
+
+
+
     public void inicioCronometro(){
         if(!bRunning) {
             chCronometro.setBase(SystemClock.elapsedRealtime() - lPauseOffset);
@@ -148,11 +156,10 @@ public class CronometroFragment extends Fragment {
             fbBotonCronometroPausa.show();
             fbBotonCronometroStop.show();
             bRunning = true;
-            fbNext.hide();
+
         }
     }
     public void finCronometro(){
-
 
         chCronometro.setBase(SystemClock.elapsedRealtime());
         lPauseOffset = 0;
@@ -162,21 +169,40 @@ public class CronometroFragment extends Fragment {
         fbBotonCronometroInicia.show();
         fbBotonCronometroPausa.hide();
 
-        fbNext.show();
+        passData.onDataRecived("C;"+traducirTiempo(lPauseOffset) );
 
     }
     public void pausaCronometro(){
-        if (bRunning){
-            chCronometro.stop();
 
-            lPauseOffset = SystemClock.elapsedRealtime() - chCronometro.getBase();
-            bRunning = false;
-            fbBotonCronometroInicia.show();
-            fbBotonCronometroPausa.hide();
+        chCronometro.stop();
 
-        }
+        lPauseOffset = SystemClock.elapsedRealtime() - chCronometro.getBase();
+        bRunning = false;
+        fbBotonCronometroInicia.show();
+        fbBotonCronometroPausa.hide();
+
+        passData.onDataRecived("C;"+traducirTiempo(lPauseOffset) );
+
 
     }
+    public String traducirTiempo (long tiempo){
+
+        long minutos = tiempo / 60000L;
+        long segundos = (tiempo % 60000L)/1000L;
+        if(segundos<10)
+            return minutos+":0"+segundos  ;
+
+        return minutos+":"+segundos  ;
+
+    }
+
+   // @Override
+   /* public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(ARG_NOMBRE, nombre);
+        outState.putString(ARG_VALOR, String.valueOf(lPauseOffset));
+    }*/
 
 
 }

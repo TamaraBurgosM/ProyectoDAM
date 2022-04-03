@@ -8,50 +8,24 @@
     tools:context=".EntrenamientoActivity"
     android:orientation="vertical">
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fbNext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|right"
-            android:layout_marginEnd="50dp"
-            android:layout_marginTop="50dp"
-            android:clickable="true"
-            android:onClick="onClickNext"
-            android:src="@android:drawable/ic_media_next"
-            app:backgroundTint="@color/purple_200"
-            android:contentDescription="Siguiente ejercicio" />
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSiguienteEjercicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="50dp"
+        android:clickable="true"
+        android:onClick="onClickNext"
+        android:src="@android:drawable/ic_media_next"
+        app:backgroundTint="@color/purple_200"
+        android:contentDescription="@string/siguiente_ejercicio" />
 
     <FrameLayout
-        android:id="@+id/contenedor"
+        android:id="@+id/flContenedorEntrenamiento"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
     </FrameLayout>
-
-
-  <!--  <FrameLayout
-        android:id="@+id/cronometroFragment"
-        android:name="com.example.fit123.ui.CronometroFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <FrameLayout
-        android:id="@+id/cuentaAtrasFragment"
-        android:name="com.example.fit123.ui.CuentaAtrasFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"  /> -->
-
 
 </LinearLayout>

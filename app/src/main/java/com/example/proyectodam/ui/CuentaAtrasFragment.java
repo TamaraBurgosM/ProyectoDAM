@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.proyectodam.R;
+import com.example.proyectodam.interfaces.PassDataI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
@@ -23,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * create an instance of this fragment.
  */
 public class CuentaAtrasFragment extends Fragment {
+    PassDataI passData;
 
     private static final String ARG_NOMBRE = "nombre";
     private static final String ARG_VALOR = "valor";
@@ -33,9 +35,9 @@ public class CuentaAtrasFragment extends Fragment {
     private int progressBar;
 
     private boolean bRunning;
-    private FloatingActionButton fbBotonCronometroInicia;
-    private FloatingActionButton fbBotonCronometroPausa;
-    private FloatingActionButton fbBotonCronometroStop;
+    private FloatingActionButton fbBotonCuentaAtrasInicia;
+    private FloatingActionButton fbBotonCuentaAtrasPausa;
+    private FloatingActionButton fbBotonCuentaAtrasStop;
     private ProgressBar pbProgress;
     private long tiempoRestante = 60000;
     private TextView tvCuentaAtras;
@@ -45,6 +47,10 @@ public class CuentaAtrasFragment extends Fragment {
 
     public CuentaAtrasFragment() {
         // Required empty public constructor
+    }
+
+    public CuentaAtrasFragment(PassDataI passData) {
+        this.passData = passData;
     }
 
 
@@ -77,7 +83,7 @@ public class CuentaAtrasFragment extends Fragment {
         tvCuentaAtras = (TextView) view.findViewById(R.id.tvCuentaAtras);
         tvCuentaAtras.setText(valor);
 
-        TextView etTiempoPrevio = (TextView) view.findViewById(R.id.etTiempoPrevio);
+        TextView etTiempoPrevio = (TextView) view.findViewById(R.id.tvTiempoPrevio);
         etTiempoPrevio.setVisibility(View.VISIBLE);
         etTiempoPrevio.setText(valor);
 
@@ -90,10 +96,10 @@ public class CuentaAtrasFragment extends Fragment {
         View vCuentaAtras = inflater.inflate(R.layout.fragment_cuenta_atras, container, false);
         View vEntrenamiento = inflater.inflate(R.layout.activity_entrenamiento, container, false);
 
-        fbBotonCronometroInicia = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fbBotonCronometroInicia);
-        fbBotonCronometroPausa = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fbBotonCronometroPausa);
-        fbBotonCronometroStop = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fbBotonCronometroStop);
-        FloatingActionButton fbNext = (FloatingActionButton) vEntrenamiento.findViewById(R.id.fbNext);
+        fbBotonCuentaAtrasInicia = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrassInicia);
+        fbBotonCuentaAtrasPausa = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrasPausa);
+        fbBotonCuentaAtrasStop = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrasStop);
+        FloatingActionButton fbNext = (FloatingActionButton) vEntrenamiento.findViewById(R.id.fabSiguienteEjercicio);
 
         tiempoRestante = traducirTiempo(valor);
 
@@ -102,23 +108,23 @@ public class CuentaAtrasFragment extends Fragment {
         pbProgress.setMax((int) tiempoRestante);
         pbProgress.setProgress(progressBar);
 
-        fbBotonCronometroPausa.hide();
-        fbBotonCronometroStop.hide();
+        fbBotonCuentaAtrasPausa.hide();
+        fbBotonCuentaAtrasStop.hide();
 
          mediaPlayer = MediaPlayer.create(getContext(), R.raw.alarm);
 
 
-        fbBotonCronometroInicia.setOnClickListener(v -> inicioCronometro());
+        fbBotonCuentaAtrasInicia.setOnClickListener(v -> inicioCuentaAtras());
 
-        fbBotonCronometroPausa.setOnClickListener(v -> pausaCronometro());
+        fbBotonCuentaAtrasPausa.setOnClickListener(v -> pausaCuentaAtras());
 
 
-        fbBotonCronometroStop.setOnClickListener(v -> finCronometro());
+        fbBotonCuentaAtrasStop.setOnClickListener(v -> finCuentaAtras());
         return vCuentaAtras;
 
 
     }
-    public void inicioCronometro(){
+    public void inicioCuentaAtras(){
         if(!bRunning) {
             cdCuentaAtras = new CountDownTimer(tiempoRestante, 1000) {
 
@@ -135,40 +141,40 @@ public class CuentaAtrasFragment extends Fragment {
 
             }.start();
 
-            fbBotonCronometroInicia.hide();
-            fbBotonCronometroPausa.show();
-            fbBotonCronometroStop.show();
+            fbBotonCuentaAtrasInicia.hide();
+            fbBotonCuentaAtrasPausa.show();
+            fbBotonCuentaAtrasStop.show();
             bRunning = true;
-
 
         }
     }
-    public void finCronometro(){
+    public void finCuentaAtras(){
 
         cdCuentaAtras.cancel();
         tvCuentaAtras.setText(valor);
         tiempoRestante = traducirTiempo(valor);
 
-        pbProgress.setProgress(0);
-        bRunning = false;
-        fbBotonCronometroStop.hide();
-        fbBotonCronometroInicia.show();
-        fbBotonCronometroPausa.hide();
-
         mediaPlayer.stop();
 
+        pbProgress.setProgress(0);
+        bRunning = false;
+        fbBotonCuentaAtrasStop.hide();
+        fbBotonCuentaAtrasInicia.show();
+        fbBotonCuentaAtrasPausa.hide();
 
+        passData.onDataRecived("A;"+tiempoRestante );
 
     }
-    public void pausaCronometro(){
-        if (bRunning){
-            cdCuentaAtras.cancel();
+    public void pausaCuentaAtras(){
 
-            bRunning = false;
-            fbBotonCronometroInicia.show();
-            fbBotonCronometroPausa.hide();
-            mediaPlayer.stop();
-        }
+        cdCuentaAtras.cancel();
+
+        bRunning = false;
+        fbBotonCuentaAtrasInicia.show();
+        fbBotonCuentaAtrasPausa.hide();
+        mediaPlayer.stop();
+        passData.onDataRecived("A;"+tiempoRestante );
+
 
 
     }

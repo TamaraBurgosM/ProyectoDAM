@@ -15,15 +15,15 @@
                 android:id="@+id/tvNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre: "
-                android:textSize="20dp"
+                android:text="@string/nombre"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="49dp"
                 tools:layout_editor_absoluteY="120dp" />
             <TextView
                 android:id="@+id/tvNombreEjercicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 tools:layout_editor_absoluteX="49dp"
                 tools:layout_editor_absoluteY="120dp" />
         </LinearLayout>
@@ -36,8 +36,8 @@
                 android:id="@+id/tvTipo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tipo: "
-                android:textSize="20dp"
+                android:text="@string/tipo"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="49dp"
                 tools:layout_editor_absoluteY="120dp" />
 
@@ -45,7 +45,7 @@
                 android:id="@+id/tvTipoEjercicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 tools:layout_editor_absoluteX="49dp"
                 tools:layout_editor_absoluteY="120dp" />
         </LinearLayout>
@@ -58,15 +58,15 @@
                 android:id="@+id/tvCantidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tiempo: "
-                android:textSize="20dp"
+                android:text="@string/tiempo"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="49dp"
                 tools:layout_editor_absoluteY="120dp" />
             <TextView
                 android:id="@+id/tvCantidadEjercicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 tools:layout_editor_absoluteX="49dp"
                 tools:layout_editor_absoluteY="120dp" />
         </LinearLayout>
@@ -74,13 +74,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/llSwitch">
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/sElegir"
+            android:id="@+id/swElegir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:visibility="invisible"
             />
     </LinearLayout>

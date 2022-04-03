@@ -9,5 +9,4 @@
 
     <include layout="@layout/nuevo_ejercicio_content" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

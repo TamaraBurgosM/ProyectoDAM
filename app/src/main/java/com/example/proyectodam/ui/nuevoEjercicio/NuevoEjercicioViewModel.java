@@ -1,8 +1,5 @@
 package com.example.proyectodam.ui.nuevoEjercicio;
 
-import android.content.Context;
-import android.content.Intent;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,7 +11,6 @@ public class NuevoEjercicioViewModel extends ViewModel {
 
     public NuevoEjercicioViewModel() {
         mText = new MutableLiveData<>();
-
     }
 
     public LiveData<String> getText() {

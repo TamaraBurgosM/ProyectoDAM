@@ -1,4 +1,4 @@
-package com.example.proyectodam.Model;
+package com.example.proyectodam.model;
 
 public class Ejercicio {
 
@@ -6,12 +6,14 @@ public class Ejercicio {
     public String sNombre="";
     public char cTipo= (char) 0;
     public String sValor="";
+    public String fecha="";
 
     public Ejercicio() {
         this.iId = iId;
         this.sNombre = sNombre;
         this.cTipo = cTipo;
         this.sValor = sValor;
+        this.fecha = fecha;
     }
     public Ejercicio(int iId, String sNombre, char cTipo, String sValor) {
         this.iId = iId;
@@ -19,6 +21,11 @@ public class Ejercicio {
         this.cTipo = cTipo;
         this.sValor = sValor;
     }
+
+    public String getFecha() {return fecha;}
+
+    public void setFecha(String fecha) {  this.fecha = fecha; }
+
 
     public int getiId() {
         return iId;

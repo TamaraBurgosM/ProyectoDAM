@@ -6,7 +6,7 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="activity_horizontal_center"></dimen>
+    <dimen name="activity_horizontal_center" />
 
     <dimen name="header_left_padding">16dp</dimen>
     <dimen name="header_height">192dp</dimen>

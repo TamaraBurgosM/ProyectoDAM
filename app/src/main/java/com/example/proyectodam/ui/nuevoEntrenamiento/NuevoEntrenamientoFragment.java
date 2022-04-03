@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.example.proyectodam.GestionFicheros;
 import com.example.proyectodam.ListaAdaptador;
 import com.example.proyectodam.MainActivity;
-import com.example.proyectodam.Model.Ejercicio;
+import com.example.proyectodam.model.Ejercicio;
 import com.example.proyectodam.R;
 import com.example.proyectodam.databinding.FragmentNuevoentrenamientoBinding;
 
@@ -26,26 +26,25 @@ import java.util.ArrayList;
 
 public class NuevoEntrenamientoFragment extends Fragment {
     private FragmentNuevoentrenamientoBinding binding;
-    GestionFicheros gestionFicheros;
-    Context c  ;
-    ArrayList<Ejercicio> alDatosEjercicio;
-    SwitchCompat sElegir;
-    Button bGuardar;
-
-    ArrayList<Integer> alIdEjercicio;
+    private GestionFicheros gestionFicheros;
+    private Context context;
+    private ArrayList<Ejercicio> alDatosEjercicio;
+    private SwitchCompat sElegir;
+    private Button bGuardar;
+    private ArrayList<Integer> alIdEjercicio;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_nuevoentrenamiento, container, false);
 
-        c = v.getContext();
+        context = v.getContext();
         bGuardar = (Button) v.findViewById(R.id.bGuardar);
         alIdEjercicio = new ArrayList<>();
 
         setUpView();
 
-        sElegir = (SwitchCompat) v.findViewById(R.id.sElegir);
+        sElegir = (SwitchCompat) v.findViewById(R.id.swElegir);
 
         if(!alDatosEjercicio.isEmpty()) {
             //Rellenamos la lista
@@ -56,13 +55,27 @@ public class NuevoEntrenamientoFragment extends Fragment {
                     TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreEjercicio);
                     tvNombre.setText(((Ejercicio) entrada).getsNombre());
 
+                    String tipo="";
+                    switch (((Ejercicio) entrada).getcTipo()){
+                        case 'C':
+                            tipo = getString(R.string.cronometro);
+                            break;
+                        case 'A':
+                            tipo = getString(R.string.cuantaAtras);
+                            break;
+                        case 'R':
+                            tipo = getString(R.string.repeticiones);
+                            break;
+
+                    }
+
                     TextView tvTipo = (TextView) view.findViewById(R.id.tvTipoEjercicio);
-                    tvTipo.setText(((Ejercicio) entrada).getcTipo() + "");
+                    tvTipo.setText(tipo);
 
                     TextView tvValor = (TextView) view.findViewById(R.id.tvCantidadEjercicio);
                     tvValor.setText(((Ejercicio) entrada).getsValor());
 
-                    SwitchCompat sElegir = (SwitchCompat) view.findViewById(R.id.sElegir);
+                    SwitchCompat sElegir = (SwitchCompat) view.findViewById(R.id.swElegir);
                     sElegir.setVisibility(View.VISIBLE);
                     sElegir.setOnCheckedChangeListener((buttonView, isChecked) -> {
                         int ejercicio = ((Ejercicio) entrada).getiId();
@@ -76,13 +89,13 @@ public class NuevoEntrenamientoFragment extends Fragment {
                         else {
                             alIdEjercicio.add(ejercicio);
                         }
-                        StringBuilder texto= new StringBuilder();
+                       /* StringBuilder texto= new StringBuilder();
 
                         for (int i = 0; i < alIdEjercicio.size(); i++) {
                             texto.append(alIdEjercicio.get(i)).append(", ");
 
                         }
-                        Toast.makeText(c, texto.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, texto.toString(), Toast.LENGTH_SHORT).show();*/
 
                     });
                 }
@@ -99,7 +112,7 @@ public class NuevoEntrenamientoFragment extends Fragment {
                         sbDatos.append(alIdEjercicio.get(i)).append(";");
 
                     }
-                    gestionFicheros.guardarFicheroSimple("Entrenamiento", sbDatos.toString(),getActivity(), c);
+                    gestionFicheros.guardarFicheroSimple(getString(R.string.ficheroEntrenamiento), sbDatos.toString(),getActivity(), context);
 
                 }
 
@@ -121,9 +134,6 @@ public class NuevoEntrenamientoFragment extends Fragment {
         binding = null;
     }
 
-
-
-
     private void setUpView() {
 
         //TextView etRecuperarDatos = findViewById(R.id.text_home);
@@ -131,7 +141,7 @@ public class NuevoEntrenamientoFragment extends Fragment {
         alDatosEjercicio = new ArrayList<Ejercicio>();
         Ejercicio ejercicio;
 
-        String texto = gestionFicheros.leerFichero("Ejercicios", getActivity(), c);
+        String texto = gestionFicheros.leerFichero(getString(R.string.ficheroEjercicios), getActivity(), context);
         // etRecuperarDatos.setText(texto);
 
         if(!texto.isEmpty()) {

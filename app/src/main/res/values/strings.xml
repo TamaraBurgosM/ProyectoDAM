@@ -12,9 +12,9 @@
     <string name="bGuardar">Guardar</string>
 
     <!--Menu -->
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Inicio</string>
     <string name="menu_nuevoEjercicio">Nuevo Ejercicio</string>
-    <string name="menu_nuevoEntrenamiento">NuevoEntrenamiento</string>
+    <string name="menu_nuevoEntrenamiento">Nuevo Entrenamiento</string>
     <string name="menu_verEntrenamientos">Ver entrenamientos</string>
 
     <!--Opciones -->
@@ -22,35 +22,38 @@
     <string name="cuantaAtras">Cuenta Atrás</string>
     <string name="repeticiones">Repeticiones</string>
 
-
-    <string name="title_activity_main2">MainActivity2</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
     <!-- Ficheros -->
-    <string name="ficheroEntrenamiento">Entrenamientos.txt</string>
-    <string name="ficheroEjercicios">Ejercicios.txt</string>
-    <string name="ficheroRegistro">Registro.txt</string>
-    <string name="ruta">""</string>
+    <string name="ficheroEntrenamiento">Entrenamiento</string>
+    <string name="ficheroEjercicios">Ejercicios</string>
+    <string name="ficheroMisEntrenamientos">MisEntrenamientos</string>
+
+
     <string name="title_activity_cronometro">CronometroActivity</string>
 
 
     <string name="_00_00ms">00:00ms</string>
-    <string name="tipo_de_ejercicio">Tipo de ejercicio</string>
-    <string name="nombre_del_ejercicio">Nombre del ejercicio:</string>
+    <string name="tipo_de_ejercicio">Tipo de ejercicio: </string>
+    <string name="nombre_del_ejercicio">Nombre del ejercicio: </string>
 
 
     <string name="nav_drawer_open">Abrir</string>
     <string name="nav_drawer_close">Cerrar</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_add_entenamiento">AddEntenamiento</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="siguiente_ejercicio">Siguiente ejercicio</string>
+    <string name="nombre">Nombre:&#160;</string>
+    <string name="tipo">Tipo:&#160;</string>
+    <string name="tiempo">Tiempo:&#160;</string>
+    <string name="_00_00">00:00</string>
+    <string name="boton_inicio">Botón inicio</string>
+    <string name="boton_pausa">Botón pausa</string>
+    <string name="boton_stop">Botón stop</string>
+    <string name="boton_empezar">Botón empezar</string>
+    <string name="_repeticiones_0">0</string>
+    <string name="nombreEjercicio">nombre</string>
+    <string name="introducir_nombre">Debe introducir un nombre</string>
+    <string name="insertar_tipo">Debe seleccionar un tipo</string>
+    <string name="introducir_valor">Debe introducir un valor</string>
+    <string name="formato_incorrecto">Formato incorrecto 00:00</string>
+    <string name="entrenamiento_configurado">Entrenamiento configurado</string>
 
 
 </resources>
