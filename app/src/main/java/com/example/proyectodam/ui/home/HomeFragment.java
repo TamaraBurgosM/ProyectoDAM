@@ -24,40 +24,49 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Fragmento opción inicio
+ */
+
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private  Context context;
     private ArrayList<Ejercicio> alDatosEjercicio;
 
+    /**
+     * Metodo de creación de la vista
+     * @param inflater infla el layout
+     * @param container contenedor de la vista
+     * @param savedInstanceState bundle
+     * @return vista
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View viewHome = binding.getRoot();
 
-        context = root.getContext();
+        context = viewHome.getContext();
 
-        FloatingActionButton start = (FloatingActionButton) root.findViewById(R.id.fabEmpezar);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), EntrenamientoActivity.class);
-                startActivity(intent);
-                //startActivity(new Intent(MainActivity.this, EntrenamientoActivity.class));
-            }
+        FloatingActionButton start = viewHome.findViewById(R.id.fabEmpezar);
+        start.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), EntrenamientoActivity.class);
+            startActivity(intent);
         });
+
+        //Llamamos a la iniciación de valores de la vista
         setUpView();
 
         if(!alDatosEjercicio.isEmpty()) {
             //Rellenamos la lista
-            ListView lista = (ListView) root.findViewById(R.id.lvLista);
+            ListView lista = viewHome.findViewById(R.id.lvLista);
             lista.setAdapter(new ListaAdaptador(getActivity(), R.layout.content_lista_entrenamientos, alDatosEjercicio) {
                 @Override
                 public void onEntrada(Object entrada, View view) {
-                    TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreEjercicio);
+                    TextView tvNombre = view.findViewById(R.id.tvNombreEjercicio);
                     tvNombre.setText(((Ejercicio) entrada).getsNombre());
 
                     String tipo="";
@@ -74,19 +83,17 @@ public class HomeFragment extends Fragment {
 
                     }
 
-                    TextView tvTipo = (TextView) view.findViewById(R.id.tvTipoEjercicio);
+                    TextView tvTipo = view.findViewById(R.id.tvTipoEjercicio);
                     tvTipo.setText(tipo);
 
-                    TextView tvValor = (TextView) view.findViewById(R.id.tvCantidadEjercicio);
+                    TextView tvValor = view.findViewById(R.id.tvCantidadEjercicio);
                     tvValor.setText(((Ejercicio) entrada).getsValor());
 
                 }
             });
         }
 
-       // final TextView textView = binding.textHome;
-       // homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+        return viewHome;
     }
 
     @Override
@@ -95,28 +102,14 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
+    /**
+     * Metodo que inicia los datos necesarios para la vista
+     * */
     private void setUpView(){
 
-        // TextView etRecuperarDatos = findViewById(R.id.text_home);
         GestionFicheros gestionFicheros = new GestionFicheros();
-        alDatosEjercicio = new ArrayList<Ejercicio>();
-       /* Ejercicio ejercicio ;
+        alDatosEjercicio = new ArrayList<>();
 
-        String texto = gestionFicheros.leerFichero(getString(R.string.ficheroEntrenamiento),getActivity(), c);
-        //  etRecuperarDatos.setText(texto);
-
-        if(!texto.isEmpty()) {
-            String[] split = texto.split(";");
-
-            for (int i = 0; i < split.length; i = i + 4) {
-                ejercicio = new Ejercicio();
-                ejercicio.setcTipo(split[i + 1].charAt(0));
-                ejercicio.setsNombre(split[i + 2]);
-                ejercicio.setsValor(split[i + 3]);
-                alDatosEjercicio.add(ejercicio);
-
-            }
-        }*/
         String sEntrenamiento =  gestionFicheros.leerFichero( getString(R.string.ficheroEntrenamiento),getActivity(), context);
 
         String[]sId= sEntrenamiento.split(";");

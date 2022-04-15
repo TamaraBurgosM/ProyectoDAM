@@ -19,7 +19,6 @@ import com.example.proyectodam.model.Ejercicio;
 import com.example.proyectodam.ui.CronometroFragment;
 import com.example.proyectodam.ui.CuentaAtrasFragment;
 import com.example.proyectodam.ui.RepeticionesFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,11 +29,10 @@ import java.util.Date;
 public class EntrenamientoActivity extends AppCompatActivity implements PassDataI {
     private AppBarConfiguration mAppBarConfiguration;
     private GestionFicheros gestionFicheros;
-    private ArrayList<Ejercicio> alEjercicio = new ArrayList<Ejercicio>();
+    private ArrayList<Ejercicio> alEjercicio = new ArrayList<>();
     private final Context context = this;
     private String datosGuardar ="";
     private String datosParcial ="";
-    private FloatingActionButton fbNext ;
     private CronometroFragment cronometroFragment;
     private int contador =0;
 
@@ -49,7 +47,6 @@ public class EntrenamientoActivity extends AppCompatActivity implements PassData
 
         }
         gestionFicheros= new GestionFicheros();
-        fbNext = (FloatingActionButton) findViewById(R.id.fabSiguienteEjercicio);
 
         //Cargamos el array List con los ejercicios del entrenamiento
         alEjercicio = getAlEntrenamiento();
@@ -69,16 +66,11 @@ public class EntrenamientoActivity extends AppCompatActivity implements PassData
 
 
     }
-  /*  @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        //Save the fragment's instance
-        getSupportFragmentManager().putFragment(outState, "myFragmentName", cronometroFragment);
-
-    }*/
-
-
+    /**
+     * Metodo para el botón Next
+     * @param v vista
+     */
     public void onClickNext(View v){
 
         //Cuando pulsamos el boton para el siguiente ejercicio incrementamos el contador
@@ -87,7 +79,7 @@ public class EntrenamientoActivity extends AppCompatActivity implements PassData
         contador ++;
         datosGuardar = datosGuardar + datosParcial;
         datosParcial = "";
-        Toast.makeText(context, datosGuardar, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, datosGuardar, Toast.LENGTH_SHORT).show();
         if (contador < alEjercicio.size()){
             verTipo(alEjercicio.get(contador).getcTipo(),
                     alEjercicio.get(contador).getsNombre(),
@@ -106,12 +98,17 @@ public class EntrenamientoActivity extends AppCompatActivity implements PassData
 
     }
 
+    /**
+     * MEtodo que carga el ejercicio que toque
+     * @param tipo de ejercicio
+     * @param nombre de ejercicio
+     * @param valor de ejercicio
+     */
     public void verTipo (char tipo, String nombre, String valor){
 
         //Cargamos el nuevo ejercicio que corresponda según su tipo
         FragmentTransaction transition;
         Bundle bundle = new Bundle();
-
 
         switch(tipo) {
             //Cronometro
@@ -173,9 +170,10 @@ public class EntrenamientoActivity extends AppCompatActivity implements PassData
                 || super.onSupportNavigateUp();
     }
 
-
-
-
+    /**
+     * Recuperamos la lista de ejercicios del entrenamiento
+     * @return lista de ejercicios del entrenamiento
+     */
     public ArrayList<Ejercicio> getAlEntrenamiento() {
 
        String sEntrenamiento =  gestionFicheros.leerFichero( getString(R.string.ficheroEntrenamiento), this, context);
@@ -214,6 +212,5 @@ public class EntrenamientoActivity extends AppCompatActivity implements PassData
 
         datosParcial = alEjercicio.get(contador).getsNombre() +";" + datos +";";
 
-        Toast.makeText(context, datosParcial, Toast.LENGTH_SHORT).show();
     }
 }

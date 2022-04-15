@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,13 +16,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectodam.GestionFicheros;
 import com.example.proyectodam.MainActivity;
-import com.example.proyectodam.model.Ejercicio;
 import com.example.proyectodam.R;
-import com.example.proyectodam.databinding.FragmentNuevoejercicioBinding;
+import com.example.proyectodam.model.Ejercicio;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Fragmento opcion Nuevo Ejercicio
+ */
 public class NuevoEjercicioFragment extends Fragment {
 
     private final Ejercicio ejercicio = new Ejercicio();
@@ -31,40 +32,36 @@ public class NuevoEjercicioFragment extends Fragment {
     private RadioButton rbCuantaAtras;
     private RadioButton rbCronometro;
     private RadioButton rbRepeticiones;
-    private String sValor;
     private EditText etCronometro;
     private EditText etCuentaAtras;
     private EditText etRepeticiones;
     private EditText tNombreEjercicio;
-    private Button bGuardar;
     private Context context;
-    private FragmentNuevoejercicioBinding binding;
 
+    /**
+     * Metodo de creación de la vista
+     * @param inflater infla el layout
+     * @param container contenedor de la vista
+     * @param savedInstanceState bundle
+     * @return vista
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_nuevoejercicio, container, false);
-        bGuardar = (Button) v.findViewById(R.id.bGuardarEjercicio) ;
+        Button bGuardar = v.findViewById(R.id.bGuardarEjercicio);
         context = v.getContext();
-        etCronometro = (EditText) v.findViewById(R.id.etCronometro);
-        etRepeticiones = (EditText) v.findViewById(R.id.etRepeticiones);
-        etCuentaAtras = (EditText) v.findViewById(R.id.etCuentaAtras);
-        tNombreEjercicio= (EditText) v.findViewById(R.id.etNombreEjercicio);
+        etCronometro =  v.findViewById(R.id.etCronometro);
+        etRepeticiones =   v.findViewById(R.id.etRepeticiones);
+        etCuentaAtras =   v.findViewById(R.id.etCuentaAtras);
+        tNombreEjercicio=   v.findViewById(R.id.etNombreEjercicio);
 
-       TextView tv = v.findViewById(R.id.tvTituloNombre);
-
-       // Intent intent = new Intent(getActivity(), NuevoEjercicioActivity.class);
-       // startActivity(intent);
-       // setContentView(R.layout.fragment_nuevoejercicio);
         setRadioButton(v);
 
-        bGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(guardar()) {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                }
+        bGuardar.setOnClickListener(view -> {
+            if(guardar()) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -74,12 +71,17 @@ public class NuevoEjercicioFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
     }
 
+    /**
+     * Metodo para guardar los datos del nuevo ejercicio
+     * Contiene las validaciones de campos
+     * @return true si guardamos correctamente, false si hay problemas
+     */
     private boolean guardar (){
         ejercicio.setiId(idGenerator());
         ejercicio.setsNombre(tNombreEjercicio.getText().toString());
+        String sValor;
         if(etCronometro.getVisibility() == View.VISIBLE){
             sValor = etCronometro.getText().toString();
         }
@@ -90,12 +92,12 @@ public class NuevoEjercicioFragment extends Fragment {
             sValor = etRepeticiones.getText().toString();
         }
         else{
-            sValor="";
+            sValor ="";
         }
         ejercicio.setsValor(sValor);
 
 
-
+        //Validaciones de campos
         if (ejercicio.getsNombre().isEmpty()) {
             Toast.makeText(context, R.string.introducir_nombre, Toast.LENGTH_SHORT).show();
         } else if (ejercicio.getcTipo() == 0) {
@@ -128,10 +130,14 @@ public class NuevoEjercicioFragment extends Fragment {
 
     }
 
+    /**
+     * Método de gestión de los Radio Button
+     * @param v Vista
+     */
     private void setRadioButton(View v){
-        rbCuantaAtras = (RadioButton) v.findViewById(R.id.rbCuantaAtras);
-        rbCronometro = (RadioButton) v.findViewById(R.id.rbCronometro);
-        rbRepeticiones = (RadioButton) v.findViewById(R.id.rbRepeticiones);
+        rbCuantaAtras =   v.findViewById(R.id.rbCuantaAtras);
+        rbCronometro =   v.findViewById(R.id.rbCronometro);
+        rbRepeticiones =   v.findViewById(R.id.rbRepeticiones);
 
         rbCuantaAtras.setOnClickListener(v13 -> {
             rbCuantaAtras.setChecked(true);
@@ -173,6 +179,10 @@ public class NuevoEjercicioFragment extends Fragment {
 
     }
 
+    /**
+     * Generacion de los id
+     * @return id del ejercicio
+     */
     public int idGenerator(){
         int id;
         String texto = gestionFicheros.leerFichero(getString(R.string.ficheroEjercicios),getActivity(), context);

@@ -1,7 +1,9 @@
 package com.example.proyectodam.model;
 
 import java.util.ArrayList;
-
+/**
+ * Clase modelo Entrenamiento
+ * */
 public class Entrenamiento {
 
     public String iId;

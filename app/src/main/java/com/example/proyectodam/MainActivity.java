@@ -1,5 +1,6 @@
 package com.example.proyectodam;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import com.google.android.material.navigation.NavigationView;
@@ -18,10 +19,22 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Ejecutamos una limpieza de cache y archivos la primera vez que instalamos
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        boolean firstStart = prefs.getBoolean("firstStart", true);
+
+        if (firstStart) {
+            GestionFicheros gestionFicheros = new GestionFicheros();
+            gestionFicheros.limpiarArchivos(this);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstStart", false);
+            editor.apply();
+        }
 
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
