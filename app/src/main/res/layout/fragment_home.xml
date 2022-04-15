@@ -9,14 +9,13 @@
     android:layout_marginTop="25dp"
     android:orientation="vertical"
     android:layout_marginRight="25dp"
-    android:layout_marginBottom="25dp"
+    android:layout_marginBottom="5dp"
     android:layout_marginLeft="25dp"
     tools:context=".ui.home.HomeFragment">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="15dp"
         android:orientation="horizontal">
 
         <TextView
@@ -32,20 +31,29 @@
             android:id="@+id/lvLista"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/fabEmpezar"
+            android:layout_above="@+id/llEmpezar"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginTop="30dp"  />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabEmpezar"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/llEmpezar"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginVertical="20dp"
-            android:contentDescription="@string/boton_empezar"
-            app:srcCompat="@android:drawable/ic_media_play"  />
+
+            android:layout_marginVertical="20dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabEmpezar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:contentDescription="@string/boton_empezar"
+                app:srcCompat="@android:drawable/ic_media_play" />
+        </LinearLayout>
 
     </RelativeLayout>
 

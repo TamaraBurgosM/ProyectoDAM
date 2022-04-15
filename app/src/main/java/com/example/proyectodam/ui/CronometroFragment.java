@@ -83,22 +83,15 @@ public class CronometroFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreEjercicio);
+        TextView tvNombre =  view.findViewById(R.id.tvNombreEjercicio);
         tvNombre.setText(nombre);
 
-        TextView tvPausa = (TextView) view.findViewById(R.id.tvPausa);
+        TextView tvPausa =  view.findViewById(R.id.tvPausa);
         tvPausa.setText(valor);
 
-        pbProgress = (ProgressBar) view.findViewById(R.id.pbProgress);
+        pbProgress =  view.findViewById(R.id.pbProgress);
         pbProgress.setProgress(progressBar);
 
-       /* chCronometro.setBase(SystemClock.elapsedRealtime());
-        lPauseOffset = 0;
-        pbProgress.setMin(0);
-        bRunning = false;
-        fbBotonCronometroStop.hide();
-        fbBotonCronometroInicia.show();
-        fbBotonCronometroPausa.hide();*/
 
     }
 
@@ -108,15 +101,15 @@ public class CronometroFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View vCronometro = inflater.inflate(R.layout.fragment_cronometro, container, false);
-        View vEntrenamiento = inflater.inflate(R.layout.activity_entrenamiento, container, false);
-        chCronometro = (Chronometer) vCronometro.findViewById(R.id.chCronometro);
-        fbBotonCronometroInicia = (FloatingActionButton) vCronometro.findViewById(R.id.fabBotonCuentaAtrassInicia);
-        fbBotonCronometroPausa = (FloatingActionButton) vCronometro.findViewById(R.id.fabBotonCuentaAtrasPausa);
-        fbBotonCronometroStop = (FloatingActionButton) vCronometro.findViewById(R.id.fabBotonCuentaAtrasStop);
-        pbProgress = (ProgressBar) vCronometro.findViewById(R.id.pbProgress);
+        chCronometro =  vCronometro.findViewById(R.id.chCronometro);
+        fbBotonCronometroInicia =   vCronometro.findViewById(R.id.fabBotonCronometroInicia);
+        fbBotonCronometroPausa =  vCronometro.findViewById(R.id.fabBotonCronometroPausa);
+        fbBotonCronometroStop =  vCronometro.findViewById(R.id.fabBotonCronometroStop);
+        pbProgress = vCronometro.findViewById(R.id.pbProgress);
 
         pbProgress.setProgress(0);
         pbProgress.setMax(60000);
+
         fbBotonCronometroPausa.hide();
         fbBotonCronometroStop.hide();
         chCronometro.stop();
@@ -124,17 +117,19 @@ public class CronometroFragment extends Fragment {
         chCronometro.setFormat("Time: %");
         chCronometro.setBase(SystemClock.elapsedRealtime());
 
-        chCronometro.setOnChronometerTickListener(chronometer -> {
-            pbProgress.setProgress( pbProgress.getProgress() + 1000);
-            if((SystemClock.elapsedRealtime() - chronometer.getBase())>= 60000){
 
-                pbProgress = (ProgressBar) vCronometro.findViewById(R.id.pbProgress);
+        chCronometro.setOnChronometerTickListener(chronometer -> {
+            pbProgress.setProgress(pbProgress.getProgress() + 1000);
+            if ((SystemClock.elapsedRealtime() - chronometer.getBase()) >= 60000) {
+
+                pbProgress = vCronometro.findViewById(R.id.pbProgress);
                 pbProgress.setProgress(0);
                 pbProgress.setMax(60000);
                 lPauseOffset = 0;
 
             }
         });
+
 
 
         fbBotonCronometroInicia.setOnClickListener(v -> inicioCronometro());
@@ -147,7 +142,9 @@ public class CronometroFragment extends Fragment {
     }
 
 
-
+    /**
+     * Metodo inicio Cronometro
+     */
     public void inicioCronometro(){
         if(!bRunning) {
             chCronometro.setBase(SystemClock.elapsedRealtime() - lPauseOffset);
@@ -159,19 +156,34 @@ public class CronometroFragment extends Fragment {
 
         }
     }
+
+    /**
+     * Metodo boton fin Cronometro
+     */
     public void finCronometro(){
 
+        //Paramos la aplicacion
+        bRunning = false;
+        chCronometro.stop();
+
+        //Guardamos los datos
+        lPauseOffset = SystemClock.elapsedRealtime() - chCronometro.getBase();
+        passData.onDataRecived("C;"+traducirTiempo(lPauseOffset) );
+
+        //Reiniciamos valores
         chCronometro.setBase(SystemClock.elapsedRealtime());
         lPauseOffset = 0;
         pbProgress.setProgress(0);
-        bRunning = false;
+
         fbBotonCronometroStop.hide();
         fbBotonCronometroInicia.show();
         fbBotonCronometroPausa.hide();
 
-        passData.onDataRecived("C;"+traducirTiempo(lPauseOffset) );
-
     }
+
+    /**
+     * Metodo boton pausa Cronometro
+     */
     public void pausaCronometro(){
 
         chCronometro.stop();
@@ -185,6 +197,12 @@ public class CronometroFragment extends Fragment {
 
 
     }
+
+    /**
+     * Metodo de traduccion del tiempo a minutos y segundos
+     * @param tiempo tiempo almacenado por el cronometro
+     * @return texto con minutos y segundos separados por dos puntos
+     */
     public String traducirTiempo (long tiempo){
 
         long minutos = tiempo / 60000L;
@@ -195,14 +213,5 @@ public class CronometroFragment extends Fragment {
         return minutos+":"+segundos  ;
 
     }
-
-   // @Override
-   /* public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putString(ARG_NOMBRE, nombre);
-        outState.putString(ARG_VALOR, String.valueOf(lPauseOffset));
-    }*/
-
 
 }

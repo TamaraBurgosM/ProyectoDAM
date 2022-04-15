@@ -56,7 +56,7 @@
             android:textSize="30sp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabBotonCuentaAtrassInicia"
+            android:id="@+id/fabBotonCronometroInicia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
@@ -68,7 +68,7 @@
             android:contentDescription="@string/boton_inicio" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabBotonCuentaAtrasPausa"
+            android:id="@+id/fabBotonCronometroPausa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"
@@ -80,7 +80,7 @@
             app:srcCompat="@android:drawable/ic_media_pause" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabBotonCuentaAtrasStop"
+            android:id="@+id/fabBotonCronometroStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pbProgress"

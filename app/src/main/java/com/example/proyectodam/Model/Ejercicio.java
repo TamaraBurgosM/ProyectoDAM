@@ -1,5 +1,7 @@
 package com.example.proyectodam.model;
-
+/**
+ *Clase modelo Ejercicio
+ * */
 public class Ejercicio {
 
     public int iId=0;

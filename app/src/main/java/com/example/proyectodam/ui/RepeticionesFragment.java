@@ -22,21 +22,21 @@ import com.example.proyectodam.R;
 import com.example.proyectodam.interfaces.PassDataI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RepeticionesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class RepeticionesFragment extends Fragment  {
-    PassDataI passData;
+    private PassDataI passData;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "nombre";
     private static final String ARG_PARAM2 = "valor";
     private static final String ARG_PARAM3 = "progressBar";
 
-    // TODO: Rename and change types of parameters
     private String nombre;
     private int valor;
     private int progressBar;
@@ -53,6 +53,7 @@ public class RepeticionesFragment extends Fragment  {
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private double accelerationPreviousValue;
+
     private final SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -63,18 +64,30 @@ public class RepeticionesFragment extends Fragment  {
 
             double accelerationCurrentValue = Math.sqrt((x * x + y * y + z * z));
 
-            double changeInAccelleration = Math.abs(accelerationCurrentValue -accelerationPreviousValue);
+            boolean bVuelta= false;
+            BigDecimal bdCurrentValue = new BigDecimal(accelerationCurrentValue);
+            bdCurrentValue =bdCurrentValue.setScale(4, RoundingMode.HALF_UP);
+
+            BigDecimal bdPreviousValue = new BigDecimal(accelerationPreviousValue);
+            bdPreviousValue = bdPreviousValue.setScale(4, RoundingMode.HALF_UP);
+
+            //Comprobamos que no es un retorno del ejercicio
+            if(bdCurrentValue.equals(bdPreviousValue)){
+                bVuelta= true;
+            }
+
+            double changeInAccelleration = Math.abs(accelerationCurrentValue - accelerationPreviousValue);
 
             accelerationPreviousValue = accelerationCurrentValue;
 
-            if (changeInAccelleration > 8 && bRunning)
+            if (changeInAccelleration > 8 && bRunning && !bVuelta)
             {
                 iContadorRepeticiones++;
                 tvRepeticiones.setText(String.valueOf(iContadorRepeticiones));
                 pbProgress.setProgress(pbProgress.getProgress()+1);
+
                 if(iContadorRepeticiones == valor ){
                     mediaPlayer.start();
-                    pbProgress.setProgress(0);
                 }
             }
 
@@ -104,7 +117,6 @@ public class RepeticionesFragment extends Fragment  {
      * @param valor Parameter 2.
      * @return A new instance of fragment RepeticionesFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static RepeticionesFragment newInstance(String nombre, int valor, int progressBar) {
         RepeticionesFragment fragment = new RepeticionesFragment();
         Bundle args = new Bundle();
@@ -130,15 +142,14 @@ public class RepeticionesFragment extends Fragment  {
         super.onViewCreated(view, savedInstanceState);
 
         Context context = view.getContext();
-        mSensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
-        TextView tvNombre  = (TextView) view.findViewById(R.id.tvNombreEjercicio);
+        TextView tvNombre  = view.findViewById(R.id.tvNombreEjercicio);
         tvNombre.setText(nombre);
 
-        tvRepeticiones = (TextView) view.findViewById(R.id.tvRepeticiones);
+        tvRepeticiones =   view.findViewById(R.id.tvRepeticiones);
         tvRepeticiones.setText(String.valueOf(valor));
-
 
     }
 
@@ -148,13 +159,12 @@ public class RepeticionesFragment extends Fragment  {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View vRepeticiones = inflater.inflate(R.layout.fragment_repeticiones, container, false);
-        View vEntrenamiento = inflater.inflate(R.layout.activity_entrenamiento, container, false);
 
-        fbBotonRepeticionesInicia = (FloatingActionButton) vRepeticiones.findViewById(R.id.fabBotonRepeticionesInicia);
-        fbBotonRepeticionesPausa = (FloatingActionButton) vRepeticiones.findViewById(R.id.fabBotonRepeticionesPausa);
-        fbBotonRepeticionesStop = (FloatingActionButton) vRepeticiones.findViewById(R.id.fabBotonRepeticionesStop);
+        fbBotonRepeticionesInicia =  vRepeticiones.findViewById(R.id.fabBotonRepeticionesInicia);
+        fbBotonRepeticionesPausa =   vRepeticiones.findViewById(R.id.fabBotonRepeticionesPausa);
+        fbBotonRepeticionesStop =   vRepeticiones.findViewById(R.id.fabBotonRepeticionesStop);
 
-        pbProgress = (ProgressBar) vRepeticiones.findViewById(R.id.pbProgress);
+        pbProgress =  vRepeticiones.findViewById(R.id.pbProgress);
         pbProgress.setMax(valor);
         pbProgress.setProgress(progressBar);
 
@@ -174,6 +184,9 @@ public class RepeticionesFragment extends Fragment  {
         return vRepeticiones;
     }
 
+    /**
+     * Metodo boton inicio Repeticiones
+     */
     public void inicioRepeticiones(){
 
         tvRepeticiones.setText(String.valueOf( iContadorRepeticiones));
@@ -185,24 +198,33 @@ public class RepeticionesFragment extends Fragment  {
 
 
     }
+
+    /**
+     * Metodo boton fin de Repeticiones
+     */
     public void finRepeticiones(){
 
+        //PAramos la aplicacion
         mediaPlayer.stop();
-        iContadorRepeticiones = 0;
-
-        pbProgress.setProgress(0);
         bRunning = false;
+
+        //Guardamos datos
+        passData.onDataRecived("R;"+ iContadorRepeticiones);
+
+        //REiniciamos valores
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.alarm);
+        iContadorRepeticiones = 0;
+        pbProgress.setProgress(0);
+
         fbBotonRepeticionesStop.hide();
         fbBotonRepeticionesInicia.show();
         fbBotonRepeticionesPausa.hide();
 
-        fbBotonRepeticionesPausa.hide();
-        fbBotonRepeticionesInicia.show();
-
-        passData.onDataRecived("R;"+ iContadorRepeticiones);
-
     }
 
+    /**
+     * Metodo boton pausa Repeticiones
+     */
     public void pausaRepeticiones(){
 
         mediaPlayer.stop();

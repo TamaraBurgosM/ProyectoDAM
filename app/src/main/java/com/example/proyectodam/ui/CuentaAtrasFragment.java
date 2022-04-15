@@ -53,7 +53,15 @@ public class CuentaAtrasFragment extends Fragment {
         this.passData = passData;
     }
 
-
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param nombre ARG_NOMBRE.
+     * @param valor ARG_VALOR.
+     * @param progressBar ARG_PROGRESO.
+     * @return A new instance of fragment CuentaAtrasFragment.
+     */
     public static CuentaAtrasFragment newInstance(String nombre, String valor, int progressBar) {
         CuentaAtrasFragment fragment = new CuentaAtrasFragment();
         Bundle args = new Bundle();
@@ -77,13 +85,13 @@ public class CuentaAtrasFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreEjercicio);
+        TextView tvNombre =  view.findViewById(R.id.tvNombreEjercicio);
         tvNombre.setText(nombre);
 
-        tvCuentaAtras = (TextView) view.findViewById(R.id.tvCuentaAtras);
+        tvCuentaAtras =  view.findViewById(R.id.tvCuentaAtras);
         tvCuentaAtras.setText(valor);
 
-        TextView etTiempoPrevio = (TextView) view.findViewById(R.id.tvTiempoPrevio);
+        TextView etTiempoPrevio =  view.findViewById(R.id.tvTiempoPrevio);
         etTiempoPrevio.setVisibility(View.VISIBLE);
         etTiempoPrevio.setText(valor);
 
@@ -94,16 +102,14 @@ public class CuentaAtrasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View vCuentaAtras = inflater.inflate(R.layout.fragment_cuenta_atras, container, false);
-        View vEntrenamiento = inflater.inflate(R.layout.activity_entrenamiento, container, false);
 
-        fbBotonCuentaAtrasInicia = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrassInicia);
-        fbBotonCuentaAtrasPausa = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrasPausa);
-        fbBotonCuentaAtrasStop = (FloatingActionButton) vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrasStop);
-        FloatingActionButton fbNext = (FloatingActionButton) vEntrenamiento.findViewById(R.id.fabSiguienteEjercicio);
+        fbBotonCuentaAtrasInicia =   vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrasInicia);
+        fbBotonCuentaAtrasPausa =  vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrasPausa);
+        fbBotonCuentaAtrasStop =  vCuentaAtras.findViewById(R.id.fabBotonCuentaAtrasStop);
 
         tiempoRestante = traducirTiempo(valor);
 
-        pbProgress = (ProgressBar) vCuentaAtras.findViewById(R.id.pbProgress);
+        pbProgress =  vCuentaAtras.findViewById(R.id.pbProgress);
 
         pbProgress.setMax((int) tiempoRestante);
         pbProgress.setProgress(progressBar);
@@ -111,21 +117,24 @@ public class CuentaAtrasFragment extends Fragment {
         fbBotonCuentaAtrasPausa.hide();
         fbBotonCuentaAtrasStop.hide();
 
-         mediaPlayer = MediaPlayer.create(getContext(), R.raw.alarm);
-
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.alarm);
 
         fbBotonCuentaAtrasInicia.setOnClickListener(v -> inicioCuentaAtras());
 
         fbBotonCuentaAtrasPausa.setOnClickListener(v -> pausaCuentaAtras());
-
 
         fbBotonCuentaAtrasStop.setOnClickListener(v -> finCuentaAtras());
         return vCuentaAtras;
 
 
     }
+
+    /**
+     * Metodo boton inicio
+     */
     public void inicioCuentaAtras(){
         if(!bRunning) {
+            bRunning = true;
             cdCuentaAtras = new CountDownTimer(tiempoRestante, 1000) {
 
                 public void onTick(long l) {
@@ -136,6 +145,7 @@ public class CuentaAtrasFragment extends Fragment {
                 }
 
                 public void onFinish() {
+
                     mediaPlayer.start();
                 }
 
@@ -144,27 +154,40 @@ public class CuentaAtrasFragment extends Fragment {
             fbBotonCuentaAtrasInicia.hide();
             fbBotonCuentaAtrasPausa.show();
             fbBotonCuentaAtrasStop.show();
-            bRunning = true;
+
 
         }
     }
+
+    /**
+     * Metodo boton fin
+     */
     public void finCuentaAtras(){
 
+        //Paramos la aplicacion
+        bRunning = false;
+        mediaPlayer.stop();
         cdCuentaAtras.cancel();
+
+        //Guardamos los datos
+        String tiempoAGuardar = traducirTiempo(traducirTiempo(valor)-(tiempoRestante-1000));
+        passData.onDataRecived("A;"+tiempoAGuardar);
+
+        //Reiniciamos datos
         tvCuentaAtras.setText(valor);
         tiempoRestante = traducirTiempo(valor);
-
-        mediaPlayer.stop();
-
         pbProgress.setProgress(0);
-        bRunning = false;
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.alarm);
+
         fbBotonCuentaAtrasStop.hide();
         fbBotonCuentaAtrasInicia.show();
         fbBotonCuentaAtrasPausa.hide();
 
-        passData.onDataRecived("A;"+tiempoRestante );
-
     }
+
+    /**
+     * Metodo pausa
+     */
     public void pausaCuentaAtras(){
 
         cdCuentaAtras.cancel();
@@ -173,11 +196,16 @@ public class CuentaAtrasFragment extends Fragment {
         fbBotonCuentaAtrasInicia.show();
         fbBotonCuentaAtrasPausa.hide();
         mediaPlayer.stop();
-        passData.onDataRecived("A;"+tiempoRestante );
+        String tiempoAGuardar = traducirTiempo(traducirTiempo(valor)-(tiempoRestante-1000));
+        passData.onDataRecived("A;"+tiempoAGuardar);
 
 
 
     }
+
+    /**
+     * Metodo actualizar tiempo
+     */
     public void actualizarTiempo(){
         int iMinutos = (int) tiempoRestante /60000;
         int iSegundos = (int) tiempoRestante % 60000 /1000;
@@ -190,17 +218,35 @@ public class CuentaAtrasFragment extends Fragment {
         sTiempo += iSegundos;
         tvCuentaAtras.setText(sTiempo);
 
-
     }
 
+    /**
+     * Metodo para traducir el tiempo de un texto minutos:segundos
+     * a lectura por la maquina
+     * @param tiempo tiempo en minutos y segundos
+     * @return tiempo en formato long
+     */
     public long traducirTiempo (String tiempo){
 
         String[] split = tiempo.split(":");
         int minutos = Integer.parseInt(split[0]) ;
-
         int segundos = Integer.parseInt(split[1]) ;
-
         return minutos * 60000L + segundos * 1000L;
+
+    }
+    /**
+     * Metodo de traduccion del tiempo a minutos y segundos
+     * @param tiempo tiempo almacenado por el cronometro
+     * @return texto con minutos y segundos separados por dos puntos
+     */
+    public String traducirTiempo (long tiempo){
+
+        long minutos = tiempo / 60000L;
+        long segundos = (tiempo % 60000L)/1000L;
+        if(segundos<10)
+            return minutos+":0"+segundos  ;
+
+        return minutos+":"+segundos  ;
 
     }
 
